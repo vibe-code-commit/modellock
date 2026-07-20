@@ -19,7 +19,7 @@ async function main(): Promise<void> {
   const format = (core.getInput("format") || "human") as "human" | "json" | "sarif";
 
   // Default permissions: contents:read — never send repository contents anywhere.
-  core.info(`model-lock ${PACKAGE_VERSION} running check in ${workingDirectory}`);
+  core.info(`modellock ${PACKAGE_VERSION} running check in ${workingDirectory}`);
 
   const result = await cmdCheck({
     cwd: workingDirectory,
@@ -62,7 +62,7 @@ async function main(): Promise<void> {
     }
 
     // Upload machine-readable report (findings only — never repository source contents)
-    const outDir = join(workingDirectory, "model-lock-report");
+    const outDir = join(workingDirectory, "modellock-report");
     mkdirSync(outDir, { recursive: true });
     writeFileSync(join(outDir, "report.json"), formatJsonReport(policy), "utf8");
     writeFileSync(join(outDir, "report.sarif"), formatSarifReport(policy, PACKAGE_VERSION), "utf8");
@@ -78,7 +78,7 @@ async function main(): Promise<void> {
   process.stderr.write(result.stderr);
 
   if (result.exitCode !== ExitCode.Success) {
-    core.setFailed(`model-lock check failed with exit code ${result.exitCode}`);
+    core.setFailed(`modellock check failed with exit code ${result.exitCode}`);
   }
 }
 

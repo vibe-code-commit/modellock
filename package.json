@@ -1,24 +1,23 @@
 {
   "name": "modellock",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "package-lock.json for AI model dependencies",
   "type": "module",
   "license": "Apache-2.0",
   "author": {
     "name": "Rabbott LLC",
-    "url": "https://github.com/vibe-code-commit/model-lock"
+    "url": "https://github.com/vibe-code-commit/modellock"
   },
   "contributors": [
     {
       "name": "Rabbott LLC",
-      "url": "https://github.com/vibe-code-commit/model-lock"
+      "url": "https://github.com/vibe-code-commit/modellock"
     }
   ],
   "engines": {
     "node": ">=24"
   },
   "bin": {
-    "model-lock": "dist/cli.js",
     "modellock": "dist/cli.js"
   },
   "main": "./dist/index.js",
@@ -59,7 +58,7 @@
     "llm",
     "lockfile",
     "ci",
-    "model-lock",
+    "modellock",
     "openai",
     "anthropic",
     "xai",
@@ -67,12 +66,12 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/vibe-code-commit/model-lock.git"
+    "url": "git+https://github.com/vibe-code-commit/modellock.git"
   },
   "bugs": {
-    "url": "https://github.com/vibe-code-commit/model-lock/issues"
+    "url": "https://github.com/vibe-code-commit/modellock/issues"
   },
-  "homepage": "https://github.com/vibe-code-commit/model-lock#readme",
+  "homepage": "https://github.com/vibe-code-commit/modellock#readme",
   "publishConfig": {
     "access": "public"
   },

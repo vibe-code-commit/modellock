@@ -43,8 +43,8 @@ ModelLock does **not**:
 ```bash
 npm install -g modellock
 cd your-repo
-model-lock init
-model-lock check
+modellock init
+modellock check
 ```
 
 Or with npx:
@@ -56,14 +56,14 @@ npx modellock check
 
 ## Commands
 
-| Command                               | Purpose                                                                         |
-| ------------------------------------- | ------------------------------------------------------------------------------- |
-| `model-lock init`                     | Discover dependencies, create `.llm-lock.yml` if missing, write `llm.lock.json` |
-| `model-lock scan`                     | Inventory discovered dependencies without writing files                         |
-| `model-lock check`                    | Diff approved lockfile vs current registry and apply policy                     |
-| `model-lock update`                   | Propose a replacement lockfile + Markdown report (`--write` to apply)           |
-| `model-lock explain <provider:model>` | Show approved, current, diffs, policy, confidence, evidence                     |
-| `model-lock validate`                 | Validate config, lockfile, and local registry snapshot                          |
+| Command                              | Purpose                                                                         |
+| ------------------------------------ | ------------------------------------------------------------------------------- |
+| `modellock init`                     | Discover dependencies, create `.llm-lock.yml` if missing, write `llm.lock.json` |
+| `modellock scan`                     | Inventory discovered dependencies without writing files                         |
+| `modellock check`                    | Diff approved lockfile vs current registry and apply policy                     |
+| `modellock update`                   | Propose a replacement lockfile + Markdown report (`--write` to apply)           |
+| `modellock explain <provider:model>` | Show approved, current, diffs, policy, confidence, evidence                     |
+| `modellock validate`                 | Validate config, lockfile, and local registry snapshot                          |
 
 Exit codes:
 
@@ -85,11 +85,11 @@ permissions:
   contents: read
 
 jobs:
-  model-lock:
+  modellock:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: vibe-code-commit/model-lock@v0
+      - uses: vibe-code-commit/modellock@v0
         with:
           network: "false"
 ```

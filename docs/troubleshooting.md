@@ -2,7 +2,7 @@
 
 ## `Missing llm.lock.json`
 
-Run `model-lock init` once to create the lockfile.
+Run `modellock init` once to create the lockfile.
 
 ## Check fails after an upstream outage
 
@@ -15,7 +15,7 @@ Conflicts are recorded as `confidence: conflicting` and never become blocking
 facts. Inspect with:
 
 ```bash
-model-lock explain provider:model
+modellock explain provider:model
 ```
 
 ## Discovery missed a model

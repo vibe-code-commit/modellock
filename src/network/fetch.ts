@@ -1,3 +1,4 @@
+import { PACKAGE_VERSION } from "../types/constants.js";
 import { isAllowedFetchUrl } from "./allowlist.js";
 
 export type FetchLike = (input: string | URL, init?: RequestInit) => Promise<Response>;
@@ -103,7 +104,7 @@ export async function limitedFetch(opts: LimitedFetchOptions): Promise<LimitedFe
         signal: controller.signal,
         headers: {
           Accept: "application/json, text/plain;q=0.9, */*;q=0.1",
-          "User-Agent": "model-lock/0.1.1 (+https://github.com/vibe-code-commit/model-lock)",
+          "User-Agent": `modellock/${PACKAGE_VERSION} (+https://github.com/vibe-code-commit/modellock)`,
           ...opts.headers,
         },
         redirect: "manual",

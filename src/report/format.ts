@@ -61,9 +61,9 @@ export function formatSarifReport(result: EvalResult, toolVersion: string): stri
       {
         tool: {
           driver: {
-            name: "model-lock",
+            name: "modellock",
             version: toolVersion,
-            informationUri: "https://github.com/vibe-code-commit/model-lock",
+            informationUri: "https://github.com/vibe-code-commit/modellock",
             rules: uniqueRules(result.findings),
           },
         },

@@ -10,7 +10,7 @@
 - [ ] Confirm `action.yml` points at `dist/action/index.cjs`
 - [ ] Confirm README opening line is exact
 - [ ] Confirm Node 24 pinned in `.nvmrc`, `.node-version`, and `engines`
-- [ ] Tag release: `git tag v0.1.0 && git push origin v0.1.0`
+- [ ] Tag release: `git tag v0.1.2 && git push origin v0.1.2`
 - [ ] Ensure `NPM_TOKEN` secret exists for the Release workflow
 - [ ] Verify npm package publishes with provenance
 - [ ] Verify GitHub Release assets include CLI/Action bundles
@@ -24,4 +24,4 @@ npm test
 npm publish --access public --provenance
 ```
 
-Then create a GitHub release from tag `v0.1.0`.
+Then create a GitHub release from tag `v0.1.2`.

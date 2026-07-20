@@ -241,7 +241,7 @@ export async function cmdCheck(opts: {
       return {
         exitCode: ExitCode.InvalidLockfile,
         stdout: "",
-        stderr: `Missing ${LOCKFILE_FILENAME}. Run \`model-lock init\` first.\n`,
+        stderr: `Missing ${LOCKFILE_FILENAME}. Run \`modellock init\` first.\n`,
       };
     }
     const lockfile = readLockfile(lfPath);

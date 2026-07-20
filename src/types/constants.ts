@@ -1,4 +1,4 @@
-export const PACKAGE_VERSION = "0.1.1";
+export const PACKAGE_VERSION = "0.1.2";
 export const PARSER_VERSION = "1.0.0";
 export const LOCKFILE_VERSION = 1 as const;
 export const REGISTRY_SCHEMA_VERSION = 1 as const;

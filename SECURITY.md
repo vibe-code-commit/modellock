@@ -9,7 +9,7 @@
 ## Reporting a vulnerability
 
 Please open a **private** GitHub security advisory on
-[vibe-code-commit/model-lock](https://github.com/vibe-code-commit/model-lock)
+[vibe-code-commit/modellock](https://github.com/vibe-code-commit/modellock)
 when available, or open a GitHub Issue without including exploit details.
 
 Do not email personal addresses. This project is operated semi-anonymously under

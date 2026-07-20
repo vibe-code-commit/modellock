@@ -70497,7 +70497,7 @@ var PolicyFindingSchema = external_exports.object({
 });
 
 // src/types/constants.ts
-var PACKAGE_VERSION = "0.1.1";
+var PACKAGE_VERSION = "0.1.2";
 var PARSER_VERSION = "1.0.0";
 var CONFIG_FILENAME = ".llm-lock.yml";
 var LOCKFILE_FILENAME = "llm.lock.json";
@@ -70706,7 +70706,7 @@ async function limitedFetch(opts) {
         signal: controller.signal,
         headers: {
           Accept: "application/json, text/plain;q=0.9, */*;q=0.1",
-          "User-Agent": "model-lock/0.1.1 (+https://github.com/vibe-code-commit/model-lock)",
+          "User-Agent": `modellock/${PACKAGE_VERSION} (+https://github.com/vibe-code-commit/modellock)`,
           ...opts.headers
         },
         redirect: "manual"
@@ -71793,9 +71793,9 @@ function formatSarifReport(result, toolVersion) {
       {
         tool: {
           driver: {
-            name: "model-lock",
+            name: "modellock",
             version: toolVersion,
-            informationUri: "https://github.com/vibe-code-commit/model-lock",
+            informationUri: "https://github.com/vibe-code-commit/modellock",
             rules: uniqueRules(result.findings)
           }
         },
@@ -71869,7 +71869,7 @@ async function cmdCheck(opts) {
       return {
         exitCode: ExitCode.InvalidLockfile,
         stdout: "",
-        stderr: `Missing ${LOCKFILE_FILENAME}. Run \`model-lock init\` first.
+        stderr: `Missing ${LOCKFILE_FILENAME}. Run \`modellock init\` first.
 `
       };
     }
@@ -71927,7 +71927,7 @@ async function main() {
   const failOnWarn = core2.getBooleanInput("fail-on-warn");
   const allowNetwork = core2.getBooleanInput("network");
   const format = core2.getInput("format") || "human";
-  core2.info(`model-lock ${PACKAGE_VERSION} running check in ${workingDirectory}`);
+  core2.info(`modellock ${PACKAGE_VERSION} running check in ${workingDirectory}`);
   const result = await cmdCheck({
     cwd: workingDirectory,
     allowNetwork,
@@ -71962,7 +71962,7 @@ async function main() {
         core2.warning(msg);
       }
     }
-    const outDir = (0, import_node_path6.join)(workingDirectory, "model-lock-report");
+    const outDir = (0, import_node_path6.join)(workingDirectory, "modellock-report");
     (0, import_node_fs6.mkdirSync)(outDir, { recursive: true });
     (0, import_node_fs6.writeFileSync)((0, import_node_path6.join)(outDir, "report.json"), formatJsonReport(policy), "utf8");
     (0, import_node_fs6.writeFileSync)((0, import_node_path6.join)(outDir, "report.sarif"), formatSarifReport(policy, PACKAGE_VERSION), "utf8");
@@ -71976,7 +71976,7 @@ async function main() {
   process.stdout.write(result.stdout);
   process.stderr.write(result.stderr);
   if (result.exitCode !== ExitCode.Success) {
-    core2.setFailed(`model-lock check failed with exit code ${result.exitCode}`);
+    core2.setFailed(`modellock check failed with exit code ${result.exitCode}`);
   }
 }
 main().catch((err) => {

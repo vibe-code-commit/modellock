@@ -9,12 +9,12 @@ Version 2.0 remain with Rabbott LLC.
 
 ## Public surfaces (semi-anonymous operations)
 
-| Surface           | Identifier                                                                    | Notes                                                                   |
-| ----------------- | ----------------------------------------------------------------------------- | ----------------------------------------------------------------------- |
-| Copyright holder  | Rabbott LLC                                                                   | Legal owner; use this for licenses, invoices, and commercial agreements |
-| GitHub repository | [vibe-code-commit/model-lock](https://github.com/vibe-code-commit/model-lock) | Operational publisher account; not a personal legal name                |
-| npm package       | `modellock`                                                                   | Published by the npm account linked to Rabbott LLC operations           |
-| Product name      | ModelLock                                                                     | Brand/product name; trademark filing recommended separately             |
+| Surface           | Identifier                                                                  | Notes                                                                   |
+| ----------------- | --------------------------------------------------------------------------- | ----------------------------------------------------------------------- |
+| Copyright holder  | Rabbott LLC                                                                 | Legal owner; use this for licenses, invoices, and commercial agreements |
+| GitHub repository | [vibe-code-commit/modellock](https://github.com/vibe-code-commit/modellock) | Operational publisher account; not a personal legal name                |
+| npm package       | `modellock`                                                                 | Published by the npm account linked to Rabbott LLC operations           |
+| Product name      | ModelLock                                                                   | Brand/product name; trademark filing recommended separately             |
 
 Personal names of individuals are intentionally omitted from public metadata.
 
@@ -22,8 +22,8 @@ Personal names of individuals are intentionally omitted from public metadata.
 
 The open-source distribution is **Apache-2.0**. See [LICENSE](../LICENSE) and [NOTICE](../NOTICE).
 
-- `model-lock@0.1.0` on npm was published under MIT (historical; unpublished).
-- Current package name is `modellock` (Apache-2.0). The CLI binary remains `model-lock`.
+- Historical: `model-lock@0.1.0` was briefly published under MIT, then unpublished.
+- Current: `modellock` on npm (Apache-2.0). CLI binary and GitHub repo are also `modellock`.
 
 Rabbott LLC may offer separate commercial products, support, or hosted services related to ModelLock. Those are not covered by the Apache-2.0 grant unless explicitly stated.
 

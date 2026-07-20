@@ -8,11 +8,8 @@
 
 ```bash
 npm install -g modellock
-model-lock --version
-# also available as: modellock --version
+modellock --version
 ```
-
-The npm package is `modellock`. The CLI binary remains `model-lock` (and `modellock`).
 
 ## Project install
 
@@ -24,8 +21,8 @@ npx modellock init
 ## From source
 
 ```bash
-git clone https://github.com/vibe-code-commit/model-lock.git
-cd model-lock
+git clone https://github.com/vibe-code-commit/modellock.git
+cd modellock
 npm ci
 npm run build
 node dist/cli.js --help
@@ -36,8 +33,8 @@ node dist/cli.js --help
 Pin a released tag after the first public release:
 
 ```yaml
-- uses: vibe-code-commit/model-lock@v0
+- uses: vibe-code-commit/modellock@v0
 ```
 
-The Action runs the committed bundle at `dist/action/index.js`. No secrets are
+The Action runs the committed bundle at `dist/action/index.cjs`. No secrets are
 required for the default offline check path.

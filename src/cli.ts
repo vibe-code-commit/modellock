@@ -7,7 +7,7 @@ import { omitUndefined } from "./util/omit-undefined.js";
 export function createProgram(): Command {
   const program = new Command();
   program
-    .name("model-lock")
+    .name("modellock")
     .description("package-lock.json for AI model dependencies")
     .version(PACKAGE_VERSION);
 
@@ -172,7 +172,7 @@ const isDirect =
   process.argv[1] &&
   (process.argv[1].endsWith("cli.ts") ||
     process.argv[1].endsWith("cli.js") ||
-    process.argv[1].includes(`${"model-lock"}`));
+    process.argv[1].includes(`${"modellock"}`));
 
 if (isDirect) {
   runCli().catch((err: unknown) => {

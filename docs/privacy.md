@@ -23,7 +23,7 @@ Those requests do not include your repository contents, lockfile, or source file
 - `.llm-lock.yml`
 - `llm.lock.json`
 - optional `llm.lock.proposed.json` and `llm.lock.report.md`
-- Action report artifacts under `model-lock-report/` (findings only)
+- Action report artifacts under `modellock-report/` (findings only)
 
 ## Secrets
 

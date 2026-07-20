@@ -5,8 +5,8 @@ Thanks for helping improve ModelLock.
 ## Setup
 
 ```bash
-git clone https://github.com/vibe-code-commit/model-lock.git
-cd model-lock
+git clone https://github.com/vibe-code-commit/modellock.git
+cd modellock
 npm ci
 npm run check-all
 ```

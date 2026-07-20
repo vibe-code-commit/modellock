@@ -27,7 +27,7 @@ outputs:
   report-dir:
     description: Directory containing machine-readable report.json and report.sarif
   exit-code:
-    description: Stable model-lock exit code
+    description: Stable modellock exit code
 
 runs:
   using: node24

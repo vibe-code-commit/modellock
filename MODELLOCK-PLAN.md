@@ -13,7 +13,7 @@
 | Field | Value |
 |---|---|
 | Product | ModelLock |
-| Working package name | `modellock` (npm); CLI binary `model-lock` |
+| Working package name | `modellock` |
 | Primary artifact | `llm.lock.json` |
 | Configuration file | `.llm-lock.yml` |
 | Primary delivery surfaces | Local CLI, GitHub Action, public npm package |
@@ -53,7 +53,7 @@ ModelLock introduces that missing layer.
 A developer runs:
 
 ```bash
-npx model-lock init
+npx modellock init
 ```
 
 ModelLock scans the repository, identifies AI model dependencies, resolves current model metadata, and writes a deterministic `llm.lock.json` file. CI then compares the repository-approved state against current provider information.
@@ -395,7 +395,7 @@ The user sees the package in npm, GitHub Marketplace, a badge, a generated chang
 They run:
 
 ```bash
-npx model-lock init
+npx modellock init
 ```
 
 The command:
@@ -432,7 +432,7 @@ ModelLock found 3 AI model dependencies.
 Created:
   .llm-lock.yml
   llm.lock.json
-  .github/workflows/model-lock.yml
+  .github/workflows/modellock.yml
 
 No repository contents were uploaded.
 ```
@@ -442,7 +442,7 @@ No repository contents were uploaded.
 On every pull request:
 
 ```bash
-npx model-lock check
+npx modellock check
 ```
 
 Possible result:
@@ -489,8 +489,8 @@ Deployment blocked by:
   failOnContextDecrease
 
 Next commands:
-  npx model-lock explain xai:grok-4.5
-  npx model-lock update --report
+  npx modellock explain xai:grok-4.5
+  npx modellock update --report
 ```
 
 ## 7.4 Reviewing an update
@@ -498,14 +498,14 @@ Next commands:
 The user runs:
 
 ```bash
-npx model-lock update --report
+npx modellock update --report
 ```
 
 ModelLock writes:
 
 ```text
-.model-lock/proposed/llm.lock.json
-.model-lock/reports/2026-08-03-model-change.md
+.modellock/proposed/llm.lock.json
+.modellock/reports/2026-08-03-model-change.md
 ```
 
 It does not replace the approved lockfile.
@@ -513,7 +513,7 @@ It does not replace the approved lockfile.
 The user can explicitly write:
 
 ```bash
-npx model-lock update --write
+npx modellock update --write
 ```
 
 or use an optional workflow that opens a pull request.
@@ -521,7 +521,7 @@ or use an optional workflow that opens a pull request.
 ## 7.5 Explanation
 
 ```bash
-npx model-lock explain xai:grok-4.5
+npx modellock explain xai:grok-4.5
 ```
 
 Output includes:
@@ -545,16 +545,16 @@ Output includes:
 The CLI executable is:
 
 ```bash
-model-lock
+modellock
 ```
 
 The npm invocation is:
 
 ```bash
-npx model-lock
+npx modellock
 ```
 
-## 8.1 `model-lock init`
+## 8.1 `modellock init`
 
 ### Purpose
 
@@ -589,7 +589,7 @@ Create the initial configuration and lockfile.
 --offline
 ```
 
-## 8.2 `model-lock scan`
+## 8.2 `modellock scan`
 
 Although not required in the earliest prototype, this should become a first-class command.
 
@@ -606,7 +606,7 @@ Inventory dependencies without creating or modifying files.
 --minimum-confidence <level>
 ```
 
-## 8.3 `model-lock check`
+## 8.3 `modellock check`
 
 ### Purpose
 
@@ -638,7 +638,7 @@ Compare the approved lockfile with the current normalized registry and apply pol
 --report <path>
 ```
 
-## 8.4 `model-lock update`
+## 8.4 `modellock update`
 
 ### Purpose
 
@@ -668,7 +668,7 @@ Generate a proposed new approved state.
 
 The MVP does not need field-by-field partial approval, but the schema should not prevent it later.
 
-## 8.5 `model-lock explain <provider:model>`
+## 8.5 `modellock explain <provider:model>`
 
 ### Purpose
 
@@ -686,7 +686,7 @@ Explain one dependency's state and decision.
 - Show whether a result is blocking.
 - Show remediation commands.
 
-## 8.6 `model-lock validate`
+## 8.6 `modellock validate`
 
 ### Purpose
 
@@ -694,16 +694,16 @@ Validate configuration, lockfile, and optional local registry files.
 
 This command is valuable for editors and CI.
 
-## 8.7 `model-lock registry`
+## 8.7 `modellock registry`
 
 Future command group, not required for MVP.
 
 Possible subcommands:
 
 ```text
-model-lock registry status
-model-lock registry update
-model-lock registry verify
+modellock registry status
+modellock registry update
+modellock registry verify
 ```
 
 ---
@@ -797,7 +797,7 @@ Example:
   "lockfileVersion": 1,
   "generatedAt": "2026-07-20T16:00:00Z",
   "generator": {
-    "name": "model-lock",
+    "name": "modellock",
     "version": "0.1.0"
   },
   "registry": {
@@ -879,7 +879,7 @@ A snapshot is append-only after publication except for clearly documented securi
 Suggested path:
 
 ```text
-.model-lock/reports/
+.modellock/reports/
 ```
 
 Reports should be safe to commit but ignored by default unless the user chooses otherwise.
@@ -1717,7 +1717,7 @@ AI is used to build the deterministic tool, not to operate it.
 Recommended single-repository structure:
 
 ```text
-model-lock/
+modellock/
 ├── .github/
 │   ├── ISSUE_TEMPLATE/
 │   │   ├── bug.yml
@@ -3037,7 +3037,7 @@ A pivot must preserve the core thesis: approved external dependency facts in ver
 
 # 31. Cursor Operating Rules
 
-Create `.cursor/rules/model-lock.mdc` or the current Cursor-equivalent rules file.
+Create `.cursor/rules/modellock.mdc` or the current Cursor-equivalent rules file.
 
 Required content:
 
@@ -3268,7 +3268,7 @@ Do not promise:
 Future command:
 
 ```bash
-model-lock doctor
+modellock doctor
 ```
 
 It may output:
@@ -3444,8 +3444,8 @@ Only after paid launch:
 Suggested setup, subject to current tool versions:
 
 ```bash
-mkdir model-lock
-cd model-lock
+mkdir modellock
+cd modellock
 git init
 
 npm init -y
@@ -3555,12 +3555,12 @@ COMMANDS
 
 Implement:
 
-- model-lock init
-- model-lock scan
-- model-lock check
-- model-lock update
-- model-lock explain <provider:model>
-- model-lock validate
+- modellock init
+- modellock scan
+- modellock check
+- modellock update
+- modellock explain <provider:model>
+- modellock validate
 
 SOURCE ADAPTERS
 
@@ -3654,7 +3654,7 @@ narrow write permissions.
 
 The Action must:
 
-- run model-lock check
+- run modellock check
 - support pull_request, push and schedule
 - write a GitHub step summary
 - annotate relevant source locations
@@ -4106,7 +4106,7 @@ permissions:
   contents: read
 
 jobs:
-  model-lock:
+  modellock:
     runs-on: ubuntu-latest
 
     steps:
@@ -4119,7 +4119,7 @@ jobs:
           node-version: "CURRENT_PINNED_LTS"
 
       - name: Check AI model dependencies
-        uses: OWNER/model-lock@FULL_COMMIT_SHA
+        uses: OWNER/modellock@FULL_COMMIT_SHA
         with:
           config: .llm-lock.yml
           lockfile: llm.lock.json

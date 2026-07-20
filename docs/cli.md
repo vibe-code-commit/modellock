@@ -3,10 +3,10 @@
 ## Initialize
 
 ```bash
-model-lock init
-model-lock init --network
-model-lock init --force
-model-lock init --cwd ./services/api --data-dir "$(npm root -g)/model-lock/data"
+modellock init
+modellock init --network
+modellock init --force
+modellock init --cwd ./services/api --data-dir "$(npm root -g)/modellock/data"
 ```
 
 `init` never modifies application source files. It only writes `.llm-lock.yml`
@@ -16,8 +16,8 @@ to overwrite.
 ## Scan
 
 ```bash
-model-lock scan
-model-lock scan --format json
+modellock scan
+modellock scan --format json
 ```
 
 Inventory discovered dependencies without writing files.
@@ -25,21 +25,21 @@ Inventory discovered dependencies without writing files.
 ## Check
 
 ```bash
-model-lock check
-model-lock check --format json
-model-lock check --format sarif > model-lock.sarif
-model-lock check --fail-on-warn
-model-lock check --network
+modellock check
+modellock check --format json
+modellock check --format sarif > modellock.sarif
+modellock check --fail-on-warn
+modellock check --network
 ```
 
 ## Update
 
 ```bash
 # Proposal only
-model-lock update --no-network
+modellock update --no-network
 
 # Replace approved lockfile explicitly
-model-lock update --write
+modellock update --write
 ```
 
 Without `--write`, ModelLock writes:
@@ -50,14 +50,14 @@ Without `--write`, ModelLock writes:
 ## Explain
 
 ```bash
-model-lock explain openai:gpt-4o-2024-08-06
-model-lock explain anthropic:claude-sonnet-4-20250514 --network
+modellock explain openai:gpt-4o-2024-08-06
+modellock explain anthropic:claude-sonnet-4-20250514 --network
 ```
 
 ## Validate
 
 ```bash
-model-lock validate
+modellock validate
 ```
 
 Validate configuration, lockfile schema, and the local registry snapshot.
@@ -76,6 +76,6 @@ Validate configuration, lockfile schema, and the local registry snapshot.
 | 7    | Discovery ambiguity requiring input          |
 
 ```bash
-model-lock check
+modellock check
 echo $?
 ```

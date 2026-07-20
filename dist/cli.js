@@ -5,7 +5,7 @@
 import { Command } from "commander";
 
 // src/types/constants.ts
-var PACKAGE_VERSION = "0.1.1";
+var PACKAGE_VERSION = "0.1.2";
 var PARSER_VERSION = "1.0.0";
 var CONFIG_FILENAME = ".llm-lock.yml";
 var LOCKFILE_FILENAME = "llm.lock.json";
@@ -867,7 +867,7 @@ async function limitedFetch(opts) {
         signal: controller.signal,
         headers: {
           Accept: "application/json, text/plain;q=0.9, */*;q=0.1",
-          "User-Agent": "model-lock/0.1.1 (+https://github.com/vibe-code-commit/model-lock)",
+          "User-Agent": `modellock/${PACKAGE_VERSION} (+https://github.com/vibe-code-commit/modellock)`,
           ...opts.headers
         },
         redirect: "manual"
@@ -2174,9 +2174,9 @@ function formatSarifReport(result, toolVersion) {
       {
         tool: {
           driver: {
-            name: "model-lock",
+            name: "modellock",
             version: toolVersion,
-            informationUri: "https://github.com/vibe-code-commit/model-lock",
+            informationUri: "https://github.com/vibe-code-commit/modellock",
             rules: uniqueRules(result.findings)
           }
         },
@@ -2445,7 +2445,7 @@ async function cmdCheck(opts) {
       return {
         exitCode: ExitCode.InvalidLockfile,
         stdout: "",
-        stderr: `Missing ${LOCKFILE_FILENAME}. Run \`model-lock init\` first.
+        stderr: `Missing ${LOCKFILE_FILENAME}. Run \`modellock init\` first.
 `
       };
     }
@@ -2621,7 +2621,7 @@ async function cmdExplain(opts) {
 // src/cli.ts
 function createProgram() {
   const program = new Command();
-  program.name("model-lock").description("package-lock.json for AI model dependencies").version(PACKAGE_VERSION);
+  program.name("modellock").description("package-lock.json for AI model dependencies").version(PACKAGE_VERSION);
   program.command("init").description("Discover model dependencies and create llm.lock.json").option("--cwd <path>", "Working directory", process.cwd()).option("--data-dir <path>", "Path to ModelLock data directory").option("--network", "Allow network refresh of registry sources", false).option("--force", "Overwrite an existing llm.lock.json", false).action(async (opts) => {
     const result = await cmdInit(
       omitUndefined({
@@ -2720,7 +2720,7 @@ async function runCli(argv = process.argv) {
   });
   await program.parseAsync(argv);
 }
-var isDirect = process.argv[1] && (process.argv[1].endsWith("cli.ts") || process.argv[1].endsWith("cli.js") || process.argv[1].includes(`${"model-lock"}`));
+var isDirect = process.argv[1] && (process.argv[1].endsWith("cli.ts") || process.argv[1].endsWith("cli.js") || process.argv[1].includes(`${"modellock"}`));
 if (isDirect) {
   runCli().catch((err) => {
     console.error(err instanceof Error ? err.message : err);
