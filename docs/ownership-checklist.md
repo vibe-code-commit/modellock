@@ -4,20 +4,20 @@ Copyright holder: **Rabbott LLC** (North Carolina)
 
 Operational GitHub publisher: **[vibe-code-commit/model-lock](https://github.com/vibe-code-commit/model-lock)**
 
-| Step                                    | Status                                                                |
-| --------------------------------------- | --------------------------------------------------------------------- |
-| LICENSE copyright = Rabbott LLC         | Done                                                                  |
-| Core license Apache-2.0                 | Done (`0.1.1+`)                                                       |
-| NOTICE + docs/ownership.md              | Done                                                                  |
-| package.json author/repository          | Done                                                                  |
-| GitHub repo created and pushed          | Done                                                                  |
-| Branch protection on main               | Done (no force-push, linear history)                                  |
-| Commit author uses GitHub noreply email | Done                                                                  |
-| npm login as `vibe-code-commit`         | Done                                                                  |
-| npm package published                   | `modellock@0.1.1` (name change after `model-lock` unpublish cooldown) |
-| Domain `modellock.dev` / `.io`          | Appears unregistered (buy manually)                                   |
-| Domain `modellock.com`                  | Taken (do not rely on it)                                             |
-| USPTO / NC trademark filing             | Manual legal step                                                     |
+| Step                                    | Status                                                             |
+| --------------------------------------- | ------------------------------------------------------------------ |
+| LICENSE copyright = Rabbott LLC         | Done                                                               |
+| Core license Apache-2.0                 | Done (`0.1.1+`)                                                    |
+| NOTICE + docs/ownership.md              | Done                                                               |
+| package.json author/repository          | Done                                                               |
+| GitHub repo created and pushed          | Done                                                               |
+| Branch protection on main               | Done (no force-push, linear history)                               |
+| Commit author uses GitHub noreply email | Done                                                               |
+| npm login as `vibe-code-commit`         | Done                                                               |
+| npm package published                   | Done: [`modellock@0.1.1`](https://www.npmjs.com/package/modellock) |
+| Domain `modellock.dev` / `.io`          | Appears unregistered (buy manually)                                |
+| Domain `modellock.com`                  | Taken (do not rely on it)                                          |
+| USPTO / NC trademark filing             | Manual legal step                                                  |
 
 ## Immediate security
 
