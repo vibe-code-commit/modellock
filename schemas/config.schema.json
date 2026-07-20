@@ -1,0 +1,172 @@
+{
+  "$ref": "#/definitions/LlmLockConfig",
+  "definitions": {
+    "LlmLockConfig": {
+      "type": "object",
+      "properties": {
+        "version": {
+          "type": "number",
+          "const": 1,
+          "default": 1
+        },
+        "include": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": []
+        },
+        "exclude": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": []
+        },
+        "pins": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "provider": {
+                "type": "string",
+                "enum": ["openai", "anthropic", "google", "xai", "unknown"]
+              },
+              "modelId": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "required": ["provider", "modelId"],
+            "additionalProperties": false
+          },
+          "default": []
+        },
+        "scan": {
+          "type": "object",
+          "properties": {
+            "roots": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "default": ["."]
+            },
+            "ignore": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "default": [
+                "**/node_modules/**",
+                "**/.git/**",
+                "**/dist/**",
+                "**/build/**",
+                "**/.venv/**",
+                "**/venv/**",
+                "**/__pycache__/**",
+                "**/coverage/**",
+                "**/*.min.js",
+                "**/*.min.css"
+              ]
+            }
+          },
+          "additionalProperties": false,
+          "default": {}
+        },
+        "policy": {
+          "type": "object",
+          "properties": {
+            "floatingAliases": {
+              "type": "string",
+              "enum": ["deny", "warn", "allow"],
+              "default": "warn"
+            },
+            "retirementWindowDays": {
+              "type": "integer",
+              "minimum": 0,
+              "default": 90
+            },
+            "maxInputPriceIncreasePercent": {
+              "type": "number",
+              "minimum": 0,
+              "default": 10
+            },
+            "maxOutputPriceIncreasePercent": {
+              "type": "number",
+              "minimum": 0,
+              "default": 10
+            },
+            "failOnContextDecrease": {
+              "type": "boolean",
+              "default": true
+            },
+            "failOnMaxOutputDecrease": {
+              "type": "boolean",
+              "default": true
+            },
+            "failOnToolCallingRemoval": {
+              "type": "boolean",
+              "default": true
+            },
+            "failOnStructuredOutputRemoval": {
+              "type": "boolean",
+              "default": true
+            },
+            "failOnVisionRemoval": {
+              "type": "boolean",
+              "default": true
+            },
+            "staleSourceBehavior": {
+              "type": "string",
+              "enum": ["warn", "fail", "ignore"],
+              "default": "warn"
+            },
+            "minBlockingConfidence": {
+              "type": "string",
+              "enum": [
+                "official-verified",
+                "multi-source-verified",
+                "single-source",
+                "conflicting",
+                "stale",
+                "unavailable"
+              ],
+              "default": "multi-source-verified"
+            }
+          },
+          "additionalProperties": false,
+          "default": {}
+        },
+        "sources": {
+          "type": "object",
+          "properties": {
+            "allowNetwork": {
+              "type": "boolean",
+              "default": false
+            },
+            "staleAfterDays": {
+              "type": "integer",
+              "exclusiveMinimum": 0,
+              "default": 14
+            },
+            "timeoutMs": {
+              "type": "integer",
+              "exclusiveMinimum": 0,
+              "default": 10000
+            },
+            "maxBytes": {
+              "type": "integer",
+              "exclusiveMinimum": 0,
+              "default": 8388608
+            }
+          },
+          "additionalProperties": false,
+          "default": {}
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "$schema": "http://json-schema.org/draft-07/schema#"
+}

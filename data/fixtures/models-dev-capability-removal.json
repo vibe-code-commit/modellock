@@ -1,0 +1,16 @@
+{
+  "openai": {
+    "id": "openai",
+    "models": {
+      "gpt-4o": {
+        "id": "gpt-4o",
+        "cost": { "input": 5.0, "output": 20 },
+        "limit": { "context": 64000, "output": 4096 },
+        "tool_call": false,
+        "structured_output": false,
+        "attachment": false,
+        "modalities": { "input": ["text"] }
+      }
+    }
+  }
+}

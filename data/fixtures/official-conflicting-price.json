@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "updatedAt": "2026-07-20T00:00:00.000Z",
+  "models": [
+    {
+      "provider": "openai",
+      "modelId": "gpt-4o",
+      "inputPricePerMillion": 9.99,
+      "outputPricePerMillion": 10,
+      "contextLimit": 128000,
+      "toolCalling": true,
+      "structuredOutput": true,
+      "vision": true,
+      "lifecycleStatus": "active"
+    }
+  ]
+}

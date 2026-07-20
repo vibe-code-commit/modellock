@@ -1,0 +1,14 @@
+node_modules/
+dist-types/
+coverage/
+*.log
+.DS_Store
+.env
+.env.*
+!.env.example
+.llm-lock.yml.local
+*.tmp
+.vscode/
+.idea/
+MODELLOCK-PLAN.md.gitignore
+*.local.md

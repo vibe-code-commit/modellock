@@ -1,0 +1,9 @@
+dist/
+dist-types/
+coverage/
+node_modules/
+package-lock.json
+data/registry/*.json
+data/fixtures/malformed.json
+data/fixtures/malicious-strings.txt
+*.sarif

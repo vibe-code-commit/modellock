@@ -1,0 +1,34 @@
+name: ModelLock
+description: Fail CI when approved AI model dependency facts drift.
+author: Rabbott LLC
+branding:
+  icon: lock
+  color: gray-dark
+
+inputs:
+  working-directory:
+    description: Repository path to scan and check
+    required: false
+    default: "."
+  network:
+    description: Allow fetching public registry metadata (never sends repo contents)
+    required: false
+    default: "false"
+  fail-on-warn:
+    description: Treat policy warnings as failures
+    required: false
+    default: "false"
+  format:
+    description: Primary stdout format (human, json, or sarif)
+    required: false
+    default: "human"
+
+outputs:
+  report-dir:
+    description: Directory containing machine-readable report.json and report.sarif
+  exit-code:
+    description: Stable model-lock exit code
+
+runs:
+  using: node24
+  main: dist/action/index.cjs

@@ -1,0 +1,1356 @@
+{
+  "$ref": "#/definitions/RegistrySnapshot",
+  "definitions": {
+    "RegistrySnapshot": {
+      "type": "object",
+      "properties": {
+        "schemaVersion": {
+          "type": "number",
+          "const": 1
+        },
+        "generatedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "generatorVersion": {
+          "type": "string"
+        },
+        "frozen": {
+          "type": "boolean",
+          "default": false
+        },
+        "freezeReason": {
+          "type": "string"
+        },
+        "warnings": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": []
+        },
+        "models": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "key": {
+                "type": "string",
+                "minLength": 1
+              },
+              "provider": {
+                "type": "string",
+                "enum": ["openai", "anthropic", "google", "xai", "unknown"]
+              },
+              "modelId": {
+                "type": "string",
+                "minLength": 1
+              },
+              "facts": {
+                "type": "object",
+                "properties": {
+                  "provider": {
+                    "type": "object",
+                    "properties": {
+                      "value": {
+                        "type": ["string", "null"]
+                      },
+                      "sourceId": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "sourceUrl": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "fetchedAt": {
+                        "type": "string",
+                        "format": "date-time"
+                      },
+                      "sourceDigest": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "parserVersion": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "confidence": {
+                        "type": "string",
+                        "enum": [
+                          "official-verified",
+                          "multi-source-verified",
+                          "single-source",
+                          "conflicting",
+                          "stale",
+                          "unavailable"
+                        ]
+                      },
+                      "effectiveAt": {
+                        "type": "string",
+                        "format": "date-time"
+                      },
+                      "candidates": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "value": {},
+                            "sourceId": {
+                              "type": "string",
+                              "minLength": 1
+                            },
+                            "sourceUrl": {
+                              "anyOf": [
+                                {
+                                  "type": "string",
+                                  "format": "uri"
+                                },
+                                {
+                                  "type": "string",
+                                  "pattern": "^file\\:"
+                                }
+                              ]
+                            },
+                            "fetchedAt": {
+                              "type": "string",
+                              "format": "date-time"
+                            },
+                            "sourceDigest": {
+                              "type": "string",
+                              "minLength": 1
+                            },
+                            "parserVersion": {
+                              "type": "string",
+                              "minLength": 1
+                            },
+                            "effectiveAt": {
+                              "type": "string",
+                              "format": "date-time"
+                            }
+                          },
+                          "required": [
+                            "sourceId",
+                            "sourceUrl",
+                            "fetchedAt",
+                            "sourceDigest",
+                            "parserVersion"
+                          ],
+                          "additionalProperties": false
+                        }
+                      }
+                    },
+                    "required": [
+                      "value",
+                      "sourceId",
+                      "sourceUrl",
+                      "fetchedAt",
+                      "sourceDigest",
+                      "parserVersion",
+                      "confidence"
+                    ],
+                    "additionalProperties": false
+                  },
+                  "requestedModelId": {
+                    "type": "object",
+                    "properties": {
+                      "value": {
+                        "type": ["string", "null"]
+                      },
+                      "sourceId": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "sourceUrl": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "fetchedAt": {
+                        "type": "string",
+                        "format": "date-time"
+                      },
+                      "sourceDigest": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "parserVersion": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "confidence": {
+                        "type": "string",
+                        "enum": [
+                          "official-verified",
+                          "multi-source-verified",
+                          "single-source",
+                          "conflicting",
+                          "stale",
+                          "unavailable"
+                        ]
+                      },
+                      "effectiveAt": {
+                        "type": "string",
+                        "format": "date-time"
+                      },
+                      "candidates": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "value": {},
+                            "sourceId": {
+                              "type": "string",
+                              "minLength": 1
+                            },
+                            "sourceUrl": {
+                              "anyOf": [
+                                {
+                                  "type": "string",
+                                  "format": "uri"
+                                },
+                                {
+                                  "type": "string",
+                                  "pattern": "^file\\:"
+                                }
+                              ]
+                            },
+                            "fetchedAt": {
+                              "type": "string",
+                              "format": "date-time"
+                            },
+                            "sourceDigest": {
+                              "type": "string",
+                              "minLength": 1
+                            },
+                            "parserVersion": {
+                              "type": "string",
+                              "minLength": 1
+                            },
+                            "effectiveAt": {
+                              "type": "string",
+                              "format": "date-time"
+                            }
+                          },
+                          "required": [
+                            "sourceId",
+                            "sourceUrl",
+                            "fetchedAt",
+                            "sourceDigest",
+                            "parserVersion"
+                          ],
+                          "additionalProperties": false
+                        }
+                      }
+                    },
+                    "required": [
+                      "value",
+                      "sourceId",
+                      "sourceUrl",
+                      "fetchedAt",
+                      "sourceDigest",
+                      "parserVersion",
+                      "confidence"
+                    ],
+                    "additionalProperties": false
+                  },
+                  "identifierKind": {
+                    "type": "object",
+                    "properties": {
+                      "value": {
+                        "anyOf": [
+                          {
+                            "type": "string",
+                            "enum": ["floating", "fixed"]
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
+                      },
+                      "sourceId": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "sourceUrl": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "fetchedAt": {
+                        "type": "string",
+                        "format": "date-time"
+                      },
+                      "sourceDigest": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "parserVersion": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "confidence": {
+                        "type": "string",
+                        "enum": [
+                          "official-verified",
+                          "multi-source-verified",
+                          "single-source",
+                          "conflicting",
+                          "stale",
+                          "unavailable"
+                        ]
+                      },
+                      "effectiveAt": {
+                        "type": "string",
+                        "format": "date-time"
+                      },
+                      "candidates": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "value": {},
+                            "sourceId": {
+                              "type": "string",
+                              "minLength": 1
+                            },
+                            "sourceUrl": {
+                              "anyOf": [
+                                {
+                                  "type": "string",
+                                  "format": "uri"
+                                },
+                                {
+                                  "type": "string",
+                                  "pattern": "^file\\:"
+                                }
+                              ]
+                            },
+                            "fetchedAt": {
+                              "type": "string",
+                              "format": "date-time"
+                            },
+                            "sourceDigest": {
+                              "type": "string",
+                              "minLength": 1
+                            },
+                            "parserVersion": {
+                              "type": "string",
+                              "minLength": 1
+                            },
+                            "effectiveAt": {
+                              "type": "string",
+                              "format": "date-time"
+                            }
+                          },
+                          "required": [
+                            "sourceId",
+                            "sourceUrl",
+                            "fetchedAt",
+                            "sourceDigest",
+                            "parserVersion"
+                          ],
+                          "additionalProperties": false
+                        }
+                      }
+                    },
+                    "required": [
+                      "value",
+                      "sourceId",
+                      "sourceUrl",
+                      "fetchedAt",
+                      "sourceDigest",
+                      "parserVersion",
+                      "confidence"
+                    ],
+                    "additionalProperties": false
+                  },
+                  "lifecycleStatus": {
+                    "type": "object",
+                    "properties": {
+                      "value": {
+                        "anyOf": [
+                          {
+                            "type": "string",
+                            "enum": ["active", "deprecated", "retired", "unknown"]
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
+                      },
+                      "sourceId": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "sourceUrl": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "fetchedAt": {
+                        "type": "string",
+                        "format": "date-time"
+                      },
+                      "sourceDigest": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "parserVersion": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "confidence": {
+                        "type": "string",
+                        "enum": [
+                          "official-verified",
+                          "multi-source-verified",
+                          "single-source",
+                          "conflicting",
+                          "stale",
+                          "unavailable"
+                        ]
+                      },
+                      "effectiveAt": {
+                        "type": "string",
+                        "format": "date-time"
+                      },
+                      "candidates": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "value": {},
+                            "sourceId": {
+                              "type": "string",
+                              "minLength": 1
+                            },
+                            "sourceUrl": {
+                              "anyOf": [
+                                {
+                                  "type": "string",
+                                  "format": "uri"
+                                },
+                                {
+                                  "type": "string",
+                                  "pattern": "^file\\:"
+                                }
+                              ]
+                            },
+                            "fetchedAt": {
+                              "type": "string",
+                              "format": "date-time"
+                            },
+                            "sourceDigest": {
+                              "type": "string",
+                              "minLength": 1
+                            },
+                            "parserVersion": {
+                              "type": "string",
+                              "minLength": 1
+                            },
+                            "effectiveAt": {
+                              "type": "string",
+                              "format": "date-time"
+                            }
+                          },
+                          "required": [
+                            "sourceId",
+                            "sourceUrl",
+                            "fetchedAt",
+                            "sourceDigest",
+                            "parserVersion"
+                          ],
+                          "additionalProperties": false
+                        }
+                      }
+                    },
+                    "required": [
+                      "value",
+                      "sourceId",
+                      "sourceUrl",
+                      "fetchedAt",
+                      "sourceDigest",
+                      "parserVersion",
+                      "confidence"
+                    ],
+                    "additionalProperties": false
+                  },
+                  "retirementDate": {
+                    "type": "object",
+                    "properties": {
+                      "value": {
+                        "type": ["string", "null"]
+                      },
+                      "sourceId": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "sourceUrl": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "fetchedAt": {
+                        "type": "string",
+                        "format": "date-time"
+                      },
+                      "sourceDigest": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "parserVersion": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "confidence": {
+                        "type": "string",
+                        "enum": [
+                          "official-verified",
+                          "multi-source-verified",
+                          "single-source",
+                          "conflicting",
+                          "stale",
+                          "unavailable"
+                        ]
+                      },
+                      "effectiveAt": {
+                        "type": "string",
+                        "format": "date-time"
+                      },
+                      "candidates": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "value": {},
+                            "sourceId": {
+                              "type": "string",
+                              "minLength": 1
+                            },
+                            "sourceUrl": {
+                              "anyOf": [
+                                {
+                                  "type": "string",
+                                  "format": "uri"
+                                },
+                                {
+                                  "type": "string",
+                                  "pattern": "^file\\:"
+                                }
+                              ]
+                            },
+                            "fetchedAt": {
+                              "type": "string",
+                              "format": "date-time"
+                            },
+                            "sourceDigest": {
+                              "type": "string",
+                              "minLength": 1
+                            },
+                            "parserVersion": {
+                              "type": "string",
+                              "minLength": 1
+                            },
+                            "effectiveAt": {
+                              "type": "string",
+                              "format": "date-time"
+                            }
+                          },
+                          "required": [
+                            "sourceId",
+                            "sourceUrl",
+                            "fetchedAt",
+                            "sourceDigest",
+                            "parserVersion"
+                          ],
+                          "additionalProperties": false
+                        }
+                      }
+                    },
+                    "required": [
+                      "value",
+                      "sourceId",
+                      "sourceUrl",
+                      "fetchedAt",
+                      "sourceDigest",
+                      "parserVersion",
+                      "confidence"
+                    ],
+                    "additionalProperties": false
+                  },
+                  "inputPricePerMillion": {
+                    "type": "object",
+                    "properties": {
+                      "value": {
+                        "type": ["number", "null"]
+                      },
+                      "sourceId": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "sourceUrl": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "fetchedAt": {
+                        "type": "string",
+                        "format": "date-time"
+                      },
+                      "sourceDigest": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "parserVersion": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "confidence": {
+                        "type": "string",
+                        "enum": [
+                          "official-verified",
+                          "multi-source-verified",
+                          "single-source",
+                          "conflicting",
+                          "stale",
+                          "unavailable"
+                        ]
+                      },
+                      "effectiveAt": {
+                        "type": "string",
+                        "format": "date-time"
+                      },
+                      "candidates": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "value": {},
+                            "sourceId": {
+                              "type": "string",
+                              "minLength": 1
+                            },
+                            "sourceUrl": {
+                              "anyOf": [
+                                {
+                                  "type": "string",
+                                  "format": "uri"
+                                },
+                                {
+                                  "type": "string",
+                                  "pattern": "^file\\:"
+                                }
+                              ]
+                            },
+                            "fetchedAt": {
+                              "type": "string",
+                              "format": "date-time"
+                            },
+                            "sourceDigest": {
+                              "type": "string",
+                              "minLength": 1
+                            },
+                            "parserVersion": {
+                              "type": "string",
+                              "minLength": 1
+                            },
+                            "effectiveAt": {
+                              "type": "string",
+                              "format": "date-time"
+                            }
+                          },
+                          "required": [
+                            "sourceId",
+                            "sourceUrl",
+                            "fetchedAt",
+                            "sourceDigest",
+                            "parserVersion"
+                          ],
+                          "additionalProperties": false
+                        }
+                      }
+                    },
+                    "required": [
+                      "value",
+                      "sourceId",
+                      "sourceUrl",
+                      "fetchedAt",
+                      "sourceDigest",
+                      "parserVersion",
+                      "confidence"
+                    ],
+                    "additionalProperties": false
+                  },
+                  "outputPricePerMillion": {
+                    "type": "object",
+                    "properties": {
+                      "value": {
+                        "type": ["number", "null"]
+                      },
+                      "sourceId": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "sourceUrl": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "fetchedAt": {
+                        "type": "string",
+                        "format": "date-time"
+                      },
+                      "sourceDigest": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "parserVersion": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "confidence": {
+                        "type": "string",
+                        "enum": [
+                          "official-verified",
+                          "multi-source-verified",
+                          "single-source",
+                          "conflicting",
+                          "stale",
+                          "unavailable"
+                        ]
+                      },
+                      "effectiveAt": {
+                        "type": "string",
+                        "format": "date-time"
+                      },
+                      "candidates": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "value": {},
+                            "sourceId": {
+                              "type": "string",
+                              "minLength": 1
+                            },
+                            "sourceUrl": {
+                              "anyOf": [
+                                {
+                                  "type": "string",
+                                  "format": "uri"
+                                },
+                                {
+                                  "type": "string",
+                                  "pattern": "^file\\:"
+                                }
+                              ]
+                            },
+                            "fetchedAt": {
+                              "type": "string",
+                              "format": "date-time"
+                            },
+                            "sourceDigest": {
+                              "type": "string",
+                              "minLength": 1
+                            },
+                            "parserVersion": {
+                              "type": "string",
+                              "minLength": 1
+                            },
+                            "effectiveAt": {
+                              "type": "string",
+                              "format": "date-time"
+                            }
+                          },
+                          "required": [
+                            "sourceId",
+                            "sourceUrl",
+                            "fetchedAt",
+                            "sourceDigest",
+                            "parserVersion"
+                          ],
+                          "additionalProperties": false
+                        }
+                      }
+                    },
+                    "required": [
+                      "value",
+                      "sourceId",
+                      "sourceUrl",
+                      "fetchedAt",
+                      "sourceDigest",
+                      "parserVersion",
+                      "confidence"
+                    ],
+                    "additionalProperties": false
+                  },
+                  "contextLimit": {
+                    "type": "object",
+                    "properties": {
+                      "value": {
+                        "type": ["number", "null"]
+                      },
+                      "sourceId": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "sourceUrl": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "fetchedAt": {
+                        "type": "string",
+                        "format": "date-time"
+                      },
+                      "sourceDigest": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "parserVersion": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "confidence": {
+                        "type": "string",
+                        "enum": [
+                          "official-verified",
+                          "multi-source-verified",
+                          "single-source",
+                          "conflicting",
+                          "stale",
+                          "unavailable"
+                        ]
+                      },
+                      "effectiveAt": {
+                        "type": "string",
+                        "format": "date-time"
+                      },
+                      "candidates": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "value": {},
+                            "sourceId": {
+                              "type": "string",
+                              "minLength": 1
+                            },
+                            "sourceUrl": {
+                              "anyOf": [
+                                {
+                                  "type": "string",
+                                  "format": "uri"
+                                },
+                                {
+                                  "type": "string",
+                                  "pattern": "^file\\:"
+                                }
+                              ]
+                            },
+                            "fetchedAt": {
+                              "type": "string",
+                              "format": "date-time"
+                            },
+                            "sourceDigest": {
+                              "type": "string",
+                              "minLength": 1
+                            },
+                            "parserVersion": {
+                              "type": "string",
+                              "minLength": 1
+                            },
+                            "effectiveAt": {
+                              "type": "string",
+                              "format": "date-time"
+                            }
+                          },
+                          "required": [
+                            "sourceId",
+                            "sourceUrl",
+                            "fetchedAt",
+                            "sourceDigest",
+                            "parserVersion"
+                          ],
+                          "additionalProperties": false
+                        }
+                      }
+                    },
+                    "required": [
+                      "value",
+                      "sourceId",
+                      "sourceUrl",
+                      "fetchedAt",
+                      "sourceDigest",
+                      "parserVersion",
+                      "confidence"
+                    ],
+                    "additionalProperties": false
+                  },
+                  "maxOutputLimit": {
+                    "type": "object",
+                    "properties": {
+                      "value": {
+                        "type": ["number", "null"]
+                      },
+                      "sourceId": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "sourceUrl": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "fetchedAt": {
+                        "type": "string",
+                        "format": "date-time"
+                      },
+                      "sourceDigest": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "parserVersion": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "confidence": {
+                        "type": "string",
+                        "enum": [
+                          "official-verified",
+                          "multi-source-verified",
+                          "single-source",
+                          "conflicting",
+                          "stale",
+                          "unavailable"
+                        ]
+                      },
+                      "effectiveAt": {
+                        "type": "string",
+                        "format": "date-time"
+                      },
+                      "candidates": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "value": {},
+                            "sourceId": {
+                              "type": "string",
+                              "minLength": 1
+                            },
+                            "sourceUrl": {
+                              "anyOf": [
+                                {
+                                  "type": "string",
+                                  "format": "uri"
+                                },
+                                {
+                                  "type": "string",
+                                  "pattern": "^file\\:"
+                                }
+                              ]
+                            },
+                            "fetchedAt": {
+                              "type": "string",
+                              "format": "date-time"
+                            },
+                            "sourceDigest": {
+                              "type": "string",
+                              "minLength": 1
+                            },
+                            "parserVersion": {
+                              "type": "string",
+                              "minLength": 1
+                            },
+                            "effectiveAt": {
+                              "type": "string",
+                              "format": "date-time"
+                            }
+                          },
+                          "required": [
+                            "sourceId",
+                            "sourceUrl",
+                            "fetchedAt",
+                            "sourceDigest",
+                            "parserVersion"
+                          ],
+                          "additionalProperties": false
+                        }
+                      }
+                    },
+                    "required": [
+                      "value",
+                      "sourceId",
+                      "sourceUrl",
+                      "fetchedAt",
+                      "sourceDigest",
+                      "parserVersion",
+                      "confidence"
+                    ],
+                    "additionalProperties": false
+                  },
+                  "toolCalling": {
+                    "type": "object",
+                    "properties": {
+                      "value": {
+                        "type": ["boolean", "null"]
+                      },
+                      "sourceId": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "sourceUrl": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "fetchedAt": {
+                        "type": "string",
+                        "format": "date-time"
+                      },
+                      "sourceDigest": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "parserVersion": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "confidence": {
+                        "type": "string",
+                        "enum": [
+                          "official-verified",
+                          "multi-source-verified",
+                          "single-source",
+                          "conflicting",
+                          "stale",
+                          "unavailable"
+                        ]
+                      },
+                      "effectiveAt": {
+                        "type": "string",
+                        "format": "date-time"
+                      },
+                      "candidates": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "value": {},
+                            "sourceId": {
+                              "type": "string",
+                              "minLength": 1
+                            },
+                            "sourceUrl": {
+                              "anyOf": [
+                                {
+                                  "type": "string",
+                                  "format": "uri"
+                                },
+                                {
+                                  "type": "string",
+                                  "pattern": "^file\\:"
+                                }
+                              ]
+                            },
+                            "fetchedAt": {
+                              "type": "string",
+                              "format": "date-time"
+                            },
+                            "sourceDigest": {
+                              "type": "string",
+                              "minLength": 1
+                            },
+                            "parserVersion": {
+                              "type": "string",
+                              "minLength": 1
+                            },
+                            "effectiveAt": {
+                              "type": "string",
+                              "format": "date-time"
+                            }
+                          },
+                          "required": [
+                            "sourceId",
+                            "sourceUrl",
+                            "fetchedAt",
+                            "sourceDigest",
+                            "parserVersion"
+                          ],
+                          "additionalProperties": false
+                        }
+                      }
+                    },
+                    "required": [
+                      "value",
+                      "sourceId",
+                      "sourceUrl",
+                      "fetchedAt",
+                      "sourceDigest",
+                      "parserVersion",
+                      "confidence"
+                    ],
+                    "additionalProperties": false
+                  },
+                  "structuredOutput": {
+                    "type": "object",
+                    "properties": {
+                      "value": {
+                        "type": ["boolean", "null"]
+                      },
+                      "sourceId": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "sourceUrl": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "fetchedAt": {
+                        "type": "string",
+                        "format": "date-time"
+                      },
+                      "sourceDigest": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "parserVersion": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "confidence": {
+                        "type": "string",
+                        "enum": [
+                          "official-verified",
+                          "multi-source-verified",
+                          "single-source",
+                          "conflicting",
+                          "stale",
+                          "unavailable"
+                        ]
+                      },
+                      "effectiveAt": {
+                        "type": "string",
+                        "format": "date-time"
+                      },
+                      "candidates": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "value": {},
+                            "sourceId": {
+                              "type": "string",
+                              "minLength": 1
+                            },
+                            "sourceUrl": {
+                              "anyOf": [
+                                {
+                                  "type": "string",
+                                  "format": "uri"
+                                },
+                                {
+                                  "type": "string",
+                                  "pattern": "^file\\:"
+                                }
+                              ]
+                            },
+                            "fetchedAt": {
+                              "type": "string",
+                              "format": "date-time"
+                            },
+                            "sourceDigest": {
+                              "type": "string",
+                              "minLength": 1
+                            },
+                            "parserVersion": {
+                              "type": "string",
+                              "minLength": 1
+                            },
+                            "effectiveAt": {
+                              "type": "string",
+                              "format": "date-time"
+                            }
+                          },
+                          "required": [
+                            "sourceId",
+                            "sourceUrl",
+                            "fetchedAt",
+                            "sourceDigest",
+                            "parserVersion"
+                          ],
+                          "additionalProperties": false
+                        }
+                      }
+                    },
+                    "required": [
+                      "value",
+                      "sourceId",
+                      "sourceUrl",
+                      "fetchedAt",
+                      "sourceDigest",
+                      "parserVersion",
+                      "confidence"
+                    ],
+                    "additionalProperties": false
+                  },
+                  "vision": {
+                    "type": "object",
+                    "properties": {
+                      "value": {
+                        "type": ["boolean", "null"]
+                      },
+                      "sourceId": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "sourceUrl": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "fetchedAt": {
+                        "type": "string",
+                        "format": "date-time"
+                      },
+                      "sourceDigest": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "parserVersion": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "confidence": {
+                        "type": "string",
+                        "enum": [
+                          "official-verified",
+                          "multi-source-verified",
+                          "single-source",
+                          "conflicting",
+                          "stale",
+                          "unavailable"
+                        ]
+                      },
+                      "effectiveAt": {
+                        "type": "string",
+                        "format": "date-time"
+                      },
+                      "candidates": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "value": {},
+                            "sourceId": {
+                              "type": "string",
+                              "minLength": 1
+                            },
+                            "sourceUrl": {
+                              "anyOf": [
+                                {
+                                  "type": "string",
+                                  "format": "uri"
+                                },
+                                {
+                                  "type": "string",
+                                  "pattern": "^file\\:"
+                                }
+                              ]
+                            },
+                            "fetchedAt": {
+                              "type": "string",
+                              "format": "date-time"
+                            },
+                            "sourceDigest": {
+                              "type": "string",
+                              "minLength": 1
+                            },
+                            "parserVersion": {
+                              "type": "string",
+                              "minLength": 1
+                            },
+                            "effectiveAt": {
+                              "type": "string",
+                              "format": "date-time"
+                            }
+                          },
+                          "required": [
+                            "sourceId",
+                            "sourceUrl",
+                            "fetchedAt",
+                            "sourceDigest",
+                            "parserVersion"
+                          ],
+                          "additionalProperties": false
+                        }
+                      }
+                    },
+                    "required": [
+                      "value",
+                      "sourceId",
+                      "sourceUrl",
+                      "fetchedAt",
+                      "sourceDigest",
+                      "parserVersion",
+                      "confidence"
+                    ],
+                    "additionalProperties": false
+                  }
+                },
+                "required": [
+                  "provider",
+                  "requestedModelId",
+                  "identifierKind",
+                  "lifecycleStatus",
+                  "retirementDate",
+                  "inputPricePerMillion",
+                  "outputPricePerMillion",
+                  "contextLimit",
+                  "maxOutputLimit",
+                  "toolCalling",
+                  "structuredOutput",
+                  "vision"
+                ],
+                "additionalProperties": false
+              },
+              "evidence": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "sourceId": {
+                      "type": "string"
+                    },
+                    "sourceUrl": {
+                      "type": "string"
+                    },
+                    "fetchedAt": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "sourceDigest": {
+                      "type": "string"
+                    },
+                    "parserVersion": {
+                      "type": "string"
+                    },
+                    "contentDigest": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "sourceId",
+                    "sourceUrl",
+                    "fetchedAt",
+                    "sourceDigest",
+                    "parserVersion",
+                    "contentDigest"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            },
+            "required": ["key", "provider", "modelId", "facts", "evidence"],
+            "additionalProperties": false
+          }
+        }
+      },
+      "required": ["schemaVersion", "generatedAt", "generatorVersion", "models"],
+      "additionalProperties": false
+    }
+  },
+  "$schema": "http://json-schema.org/draft-07/schema#"
+}

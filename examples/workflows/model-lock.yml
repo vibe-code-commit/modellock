@@ -1,0 +1,30 @@
+name: ModelLock
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  schedule:
+    - cron: "0 12 * * 1"
+
+permissions:
+  contents: read
+
+jobs:
+  model-lock:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run ModelLock check
+        uses: vibe-code-commit/model-lock@v0
+        with:
+          working-directory: .
+          network: "false"
+          format: human
+      - name: Upload machine-readable report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: model-lock-report
+          path: model-lock-report/
+          if-no-files-found: ignore

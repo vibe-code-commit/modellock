@@ -1,0 +1,41 @@
+# Optional workflow that can open issues/PRs when ModelLock finds drift.
+# Uses narrowly scoped write permissions. Do not use as the default.
+
+name: ModelLock with PR
+
+on:
+  schedule:
+    - cron: "0 9 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+
+jobs:
+  model-lock:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+      - name: Install ModelLock
+        run: npm install -g model-lock@latest
+      - name: Update proposal
+        run: model-lock update --no-network
+      - name: Create pull request for lockfile proposal
+        uses: peter-evans/create-pull-request@v6
+        with:
+          commit-message: "chore: propose llm.lock.json update"
+          title: "chore: ModelLock lockfile update"
+          body: |
+            Automated ModelLock update proposal.
+
+            Review `llm.lock.report.md` before merging.
+            Source code was never sent off the runner.
+          branch: model-lock/update
+          add-paths: |
+            llm.lock.proposed.json
+            llm.lock.report.md
