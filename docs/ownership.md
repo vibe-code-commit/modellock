@@ -8,12 +8,12 @@ All rights in this repository that are not granted by the MIT License remain wit
 
 ## Public surfaces (semi-anonymous operations)
 
-| Surface | Identifier | Notes |
-|---|---|---|
-| Copyright holder | Rabbott LLC | Legal owner; use this for licenses, invoices, and commercial agreements |
-| GitHub repository | [vibe-code-commit/model-lock](https://github.com/vibe-code-commit/model-lock) | Operational publisher account; not a personal legal name |
-| npm package | `model-lock` | Published by the npm account linked to Rabbott LLC operations |
-| Product name | ModelLock | Brand/product name; trademark filing recommended separately |
+| Surface           | Identifier                                                                    | Notes                                                                   |
+| ----------------- | ----------------------------------------------------------------------------- | ----------------------------------------------------------------------- |
+| Copyright holder  | Rabbott LLC                                                                   | Legal owner; use this for licenses, invoices, and commercial agreements |
+| GitHub repository | [vibe-code-commit/model-lock](https://github.com/vibe-code-commit/model-lock) | Operational publisher account; not a personal legal name                |
+| npm package       | `model-lock`                                                                  | Published by the npm account linked to Rabbott LLC operations           |
+| Product name      | ModelLock                                                                     | Brand/product name; trademark filing recommended separately             |
 
 Personal names of individuals are intentionally omitted from public metadata.
 

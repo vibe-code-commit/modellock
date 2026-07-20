@@ -18,7 +18,7 @@
     "node": ">=24"
   },
   "bin": {
-    "model-lock": "./dist/cli.js"
+    "model-lock": "dist/cli.js"
   },
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -73,8 +73,7 @@
   },
   "homepage": "https://github.com/vibe-code-commit/model-lock#readme",
   "publishConfig": {
-    "access": "public",
-    "provenance": true
+    "access": "public"
   },
   "dependencies": {
     "@actions/core": "^1.11.1",
