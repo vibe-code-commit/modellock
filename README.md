@@ -41,7 +41,7 @@ ModelLock does **not**:
 ## Quick start
 
 ```bash
-npm install -g model-lock
+npm install -g modellock
 cd your-repo
 model-lock init
 model-lock check
@@ -50,8 +50,8 @@ model-lock check
 Or with npx:
 
 ```bash
-npx model-lock init
-npx model-lock check
+npx modellock init
+npx modellock check
 ```
 
 ## Commands

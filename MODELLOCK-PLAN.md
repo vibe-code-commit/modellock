@@ -13,7 +13,7 @@
 | Field | Value |
 |---|---|
 | Product | ModelLock |
-| Working package name | `model-lock` |
+| Working package name | `modellock` (npm); CLI binary `model-lock` |
 | Primary artifact | `llm.lock.json` |
 | Configuration file | `.llm-lock.yml` |
 | Primary delivery surfaces | Local CLI, GitHub Action, public npm package |

@@ -1,5 +1,5 @@
 {
-  "name": "model-lock",
+  "name": "modellock",
   "version": "0.1.1",
   "description": "package-lock.json for AI model dependencies",
   "type": "module",
@@ -18,7 +18,8 @@
     "node": ">=24"
   },
   "bin": {
-    "model-lock": "dist/cli.js"
+    "model-lock": "dist/cli.js",
+    "modellock": "dist/cli.js"
   },
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",

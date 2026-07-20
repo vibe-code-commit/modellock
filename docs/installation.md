@@ -7,15 +7,18 @@
 ## Global install
 
 ```bash
-npm install -g model-lock
+npm install -g modellock
 model-lock --version
+# also available as: modellock --version
 ```
+
+The npm package is `modellock`. The CLI binary remains `model-lock` (and `modellock`).
 
 ## Project install
 
 ```bash
-npm install -D model-lock
-npx model-lock init
+npm install -D modellock
+npx modellock init
 ```
 
 ## From source

@@ -22,7 +22,7 @@ jobs:
         with:
           node-version: "24"
       - name: Install ModelLock
-        run: npm install -g model-lock@latest
+        run: npm install -g modellock@latest
       - name: Update proposal
         run: model-lock update --no-network
       - name: Create pull request for lockfile proposal
