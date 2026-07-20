@@ -1,0 +1,15 @@
+---
+description: ModelLock constitution — consult MODELLOCK-PLAN.md before product or architecture changes
+globs:
+alwaysApply: true
+---
+
+# ModelLock constitution
+
+Before changing product behavior, schemas, CLI contracts, security posture, or monetization:
+
+1. Read [MODELLOCK-PLAN.md](mdc:MODELLOCK-PLAN.md) (canonical constitution).
+2. If implementation would conflict with that file, **amend MODELLOCK-PLAN.md first**, then implement.
+3. Copyright holder is **Rabbott LLC**. License is **Apache-2.0**.
+4. No runtime AI/LLM calls, no hosted backend, no telemetry, no uploading customer source.
+5. Prefer deterministic, evidence-backed, offline-first behavior.

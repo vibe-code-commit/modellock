@@ -22,18 +22,18 @@ scan:
 policy:
   floatingAliases: warn
   retirementWindowDays: 90
-  maxInputPriceIncreasePercent: 10
-  maxOutputPriceIncreasePercent: 10
+  maxInputPriceIncreasePercent: 15
+  maxOutputPriceIncreasePercent: 15
   failOnContextDecrease: true
   failOnMaxOutputDecrease: true
   failOnToolCallingRemoval: true
   failOnStructuredOutputRemoval: true
-  failOnVisionRemoval: true
+  failOnVisionRemoval: false
   staleSourceBehavior: warn
-  minBlockingConfidence: multi-source-verified
+  minBlockingConfidence: official-verified
 sources:
   allowNetwork: false
-  staleAfterDays: 14
+  staleAfterDays: 7
   timeoutMs: 10000
   maxBytes: 8388608
 ```
@@ -53,26 +53,26 @@ sources:
 
 ### `policy`
 
-| Key                             | Default                 | Meaning                                         |
-| ------------------------------- | ----------------------- | ----------------------------------------------- |
-| `floatingAliases`               | `warn`                  | `deny`, `warn`, or `allow` floating aliases     |
-| `retirementWindowDays`          | `90`                    | Fail/warn when retirement is within N days      |
-| `maxInputPriceIncreasePercent`  | `10`                    | Max allowed input price increase                |
-| `maxOutputPriceIncreasePercent` | `10`                    | Max allowed output price increase               |
-| `failOnContextDecrease`         | `true`                  | Fail when context shrinks                       |
-| `failOnMaxOutputDecrease`       | `true`                  | Fail when max output shrinks                    |
-| `failOnToolCallingRemoval`      | `true`                  | Fail when tools support is removed              |
-| `failOnStructuredOutputRemoval` | `true`                  | Fail when structured output is removed          |
-| `failOnVisionRemoval`           | `true`                  | Fail when vision is removed                     |
-| `staleSourceBehavior`           | `warn`                  | `warn`, `fail`, or `ignore` when sources freeze |
-| `minBlockingConfidence`         | `multi-source-verified` | Minimum confidence required to block CI         |
+| Key                             | Default             | Meaning                                         |
+| ------------------------------- | ------------------- | ----------------------------------------------- |
+| `floatingAliases`               | `warn`              | `deny`, `warn`, or `allow` floating aliases     |
+| `retirementWindowDays`          | `90`                | Fail/warn when retirement is within N days      |
+| `maxInputPriceIncreasePercent`  | `15`                | Max allowed input price increase                |
+| `maxOutputPriceIncreasePercent` | `15`                | Max allowed output price increase               |
+| `failOnContextDecrease`         | `true`              | Fail when context shrinks                       |
+| `failOnMaxOutputDecrease`       | `true`              | Fail when max output shrinks                    |
+| `failOnToolCallingRemoval`      | `true`              | Fail when tools support is removed              |
+| `failOnStructuredOutputRemoval` | `true`              | Fail when structured output is removed          |
+| `failOnVisionRemoval`           | `false`             | Fail when vision is removed                     |
+| `staleSourceBehavior`           | `warn`              | `warn`, `fail`, or `ignore` when sources freeze |
+| `minBlockingConfidence`         | `official-verified` | Minimum confidence required to block CI         |
 
 ### `sources`
 
 | Key              | Default   | Meaning                                          |
 | ---------------- | --------- | ------------------------------------------------ |
 | `allowNetwork`   | `false`   | Offline-first; opt in to public metadata fetches |
-| `staleAfterDays` | `14`      | Age after which facts become `stale`             |
+| `staleAfterDays` | `7`       | Age after which facts become `stale`             |
 | `timeoutMs`      | `10000`   | Per-request timeout                              |
 | `maxBytes`       | `8388608` | Max response size                                |
 

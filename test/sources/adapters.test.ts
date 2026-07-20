@@ -140,7 +140,12 @@ describe("network limits", () => {
         headers: { "content-length": "100" },
       });
     await expect(
-      limitedFetch({ url: "https://example.com/x", timeoutMs: 1000, maxBytes: 10, fetchImpl }),
+      limitedFetch({
+        url: "https://models.dev/api.json",
+        timeoutMs: 1000,
+        maxBytes: 10,
+        fetchImpl,
+      }),
     ).rejects.toBeInstanceOf(NetworkError);
   });
 
@@ -156,12 +161,17 @@ describe("network limits", () => {
       return new Response("{}");
     };
     await expect(
-      limitedFetch({ url: "https://example.com/slow", timeoutMs: 50, maxBytes: 1000, fetchImpl }),
+      limitedFetch({
+        url: "https://models.dev/api.json",
+        timeoutMs: 50,
+        maxBytes: 1000,
+        fetchImpl,
+      }),
     ).rejects.toMatchObject({ code: "timeout" });
   });
 
   it("rejects malformed JSON bodies", () => {
-    expect(() => parseJsonBody("{", "https://example.com")).toThrow(NetworkError);
+    expect(() => parseJsonBody("{", "https://models.dev/api.json")).toThrow(NetworkError);
   });
 });
 

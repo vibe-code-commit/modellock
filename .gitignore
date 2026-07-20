@@ -10,5 +10,4 @@ coverage/
 *.tmp
 .vscode/
 .idea/
-MODELLOCK-PLAN.md.gitignore
 *.local.md

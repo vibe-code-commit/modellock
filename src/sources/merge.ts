@@ -163,7 +163,7 @@ export function mergeSourceResults(
     freezeReason?: string;
   } = {},
 ): RegistrySnapshot {
-  const staleAfterDays = options.staleAfterDays ?? 14;
+  const staleAfterDays = options.staleAfterDays ?? 7;
   const now = new Date();
   const warnings: string[] = [];
 

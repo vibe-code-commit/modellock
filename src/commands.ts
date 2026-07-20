@@ -69,13 +69,24 @@ export async function cmdInit(opts: {
   cwd: string;
   dataDir?: string | undefined;
   allowNetwork?: boolean | undefined;
+  force?: boolean | undefined;
 }): Promise<CommandResult> {
   try {
     const cwd = opts.cwd;
+    const lfPath = lockfilePath(cwd);
+    const configPath = join(cwd, CONFIG_FILENAME);
+    if (!opts.force && existsSync(lfPath)) {
+      return {
+        exitCode: ExitCode.InvalidConfig,
+        stdout: "",
+        stderr: `${LOCKFILE_FILENAME} already exists. Re-run with --force to overwrite.\n`,
+      };
+    }
+
     const { config, path: existingConfig, digest } = loadConfig(cwd);
     if (!existingConfig) {
       const yaml = configToYaml(defaultConfig());
-      writeFileSync(join(cwd, CONFIG_FILENAME), yaml, "utf8");
+      writeFileSync(configPath, yaml, "utf8");
     }
 
     const dataDir = resolveDataDir(opts.dataDir);
@@ -97,20 +108,118 @@ export async function cmdInit(opts: {
       config,
       configDigest: digest,
     });
-    writeLockfile(lockfilePath(cwd), lockfile);
+    writeLockfile(lfPath, lockfile);
 
     const lines = [
       `Created ${existingConfig ? "lockfile" : `${CONFIG_FILENAME} and lockfile`}`,
       `Dependencies: ${lockfile.dependencies.length}`,
       ...warnings.map((w) => `Warning: ${sanitizeLine(w)}`),
+      ...detected
+        .filter((d) => d.lowConfidence)
+        .map(
+          (d) =>
+            `Warning: low-confidence discovery ${d.provider}:${d.modelId} (marked in lockfile)`,
+        ),
     ];
     return { exitCode: ExitCode.Success, stdout: lines.join("\n") + "\n", stderr: "" };
   } catch (err) {
     if (err instanceof LockfileValidationError) {
-      return { exitCode: ExitCode.ValidationError, stdout: "", stderr: err.message + "\n" };
+      return { exitCode: ExitCode.InvalidLockfile, stdout: "", stderr: err.message + "\n" };
     }
     return {
       exitCode: ExitCode.InternalError,
+      stdout: "",
+      stderr: (err instanceof Error ? err.message : String(err)) + "\n",
+    };
+  }
+}
+
+export async function cmdScan(opts: {
+  cwd: string;
+  format?: "human" | "json" | undefined;
+}): Promise<CommandResult> {
+  try {
+    const { config } = loadConfig(opts.cwd);
+    const detected = discoverDependencies(opts.cwd, config);
+    if (opts.format === "json") {
+      return {
+        exitCode: ExitCode.Success,
+        stdout: JSON.stringify({ dependencies: detected }, null, 2) + "\n",
+        stderr: "",
+      };
+    }
+    const lines = detected.map((d) => {
+      const occ = d.occurrences[0];
+      const loc = occ ? `${occ.path}:${occ.line}` : "";
+      const low = d.lowConfidence ? " low-confidence" : "";
+      return `${d.provider}:${d.modelId} (${d.identifierKind}, conf=${d.confidence.toFixed(2)}${low}) ${loc}`;
+    });
+    if (lines.length === 0) lines.push("No model dependencies discovered.");
+    return { exitCode: ExitCode.Success, stdout: lines.join("\n") + "\n", stderr: "" };
+  } catch (err) {
+    return {
+      exitCode: ExitCode.InternalError,
+      stdout: "",
+      stderr: (err instanceof Error ? err.message : String(err)) + "\n",
+    };
+  }
+}
+
+export async function cmdValidate(opts: {
+  cwd: string;
+  dataDir?: string | undefined;
+}): Promise<CommandResult> {
+  try {
+    const { config, path: configPath } = loadConfig(opts.cwd);
+    void config;
+    const lfPath = lockfilePath(opts.cwd);
+    if (!existsSync(lfPath)) {
+      return {
+        exitCode: ExitCode.InvalidLockfile,
+        stdout: "",
+        stderr: `Missing ${LOCKFILE_FILENAME}\n`,
+      };
+    }
+    try {
+      const lockfile = readLockfile(lfPath);
+      if (lockfile.lockfileVersion !== 1) {
+        return {
+          exitCode: ExitCode.UnsupportedLockfileVersion,
+          stdout: "",
+          stderr: `Unsupported lockfileVersion: ${String((lockfile as { lockfileVersion?: unknown }).lockfileVersion)}\n`,
+        };
+      }
+    } catch (err) {
+      if (err instanceof LockfileValidationError) {
+        const msg = err.message;
+        if (/version|lockfileVersion/i.test(msg)) {
+          return { exitCode: ExitCode.UnsupportedLockfileVersion, stdout: "", stderr: msg + "\n" };
+        }
+        return { exitCode: ExitCode.InvalidLockfile, stdout: "", stderr: msg + "\n" };
+      }
+      throw err;
+    }
+
+    const dataDir = resolveDataDir(opts.dataDir);
+    try {
+      loadRegistrySnapshot(dataDir);
+    } catch (err) {
+      return {
+        exitCode: ExitCode.RegistryUnavailable,
+        stdout: "",
+        stderr: `Registry invalid: ${err instanceof Error ? err.message : String(err)}\n`,
+      };
+    }
+
+    const lines = [
+      `Config: ${configPath ?? "(defaults)"} OK`,
+      `Lockfile: ${lfPath} OK`,
+      `Registry: ${dataDir} OK`,
+    ];
+    return { exitCode: ExitCode.Success, stdout: lines.join("\n") + "\n", stderr: "" };
+  } catch (err) {
+    return {
+      exitCode: ExitCode.InvalidConfig,
       stdout: "",
       stderr: (err instanceof Error ? err.message : String(err)) + "\n",
     };
@@ -130,12 +239,19 @@ export async function cmdCheck(opts: {
     const lfPath = lockfilePath(opts.cwd);
     if (!existsSync(lfPath)) {
       return {
-        exitCode: ExitCode.ValidationError,
+        exitCode: ExitCode.InvalidLockfile,
         stdout: "",
         stderr: `Missing ${LOCKFILE_FILENAME}. Run \`model-lock init\` first.\n`,
       };
     }
     const lockfile = readLockfile(lfPath);
+    if (lockfile.lockfileVersion !== 1) {
+      return {
+        exitCode: ExitCode.UnsupportedLockfileVersion,
+        stdout: "",
+        stderr: `Unsupported lockfileVersion: ${String((lockfile as { lockfileVersion?: unknown }).lockfileVersion)}\n`,
+      };
+    }
     const dataDir = resolveDataDir(opts.dataDir);
     const { registry, warnings } = await loadCurrentRegistry({
       dataDir,
@@ -165,7 +281,11 @@ export async function cmdCheck(opts: {
     return { exitCode, stdout, stderr: "" };
   } catch (err) {
     if (err instanceof LockfileValidationError) {
-      return { exitCode: ExitCode.ValidationError, stdout: "", stderr: err.message + "\n" };
+      const msg = err.message;
+      if (/version|lockfileVersion/i.test(msg)) {
+        return { exitCode: ExitCode.UnsupportedLockfileVersion, stdout: "", stderr: msg + "\n" };
+      }
+      return { exitCode: ExitCode.InvalidLockfile, stdout: "", stderr: msg + "\n" };
     }
     return {
       exitCode: ExitCode.InternalError,
@@ -238,7 +358,7 @@ export async function cmdUpdate(opts: {
     return { exitCode: ExitCode.Success, stdout: lines.join("\n") + "\n", stderr: "" };
   } catch (err) {
     if (err instanceof LockfileValidationError) {
-      return { exitCode: ExitCode.ValidationError, stdout: "", stderr: err.message + "\n" };
+      return { exitCode: ExitCode.InvalidLockfile, stdout: "", stderr: err.message + "\n" };
     }
     return {
       exitCode: ExitCode.InternalError,
@@ -261,7 +381,7 @@ export async function cmdExplain(opts: {
     const lfPath = lockfilePath(opts.cwd);
     if (!existsSync(lfPath)) {
       return {
-        exitCode: ExitCode.ValidationError,
+        exitCode: ExitCode.InvalidLockfile,
         stdout: "",
         stderr: `Missing ${LOCKFILE_FILENAME}\n`,
       };
@@ -270,7 +390,7 @@ export async function cmdExplain(opts: {
     const approved = lockfile.dependencies.find((d) => d.key === key);
     if (!approved) {
       return {
-        exitCode: ExitCode.UsageError,
+        exitCode: ExitCode.InvalidConfig,
         stdout: "",
         stderr: `Model ${key} not found in lockfile\n`,
       };
@@ -310,7 +430,7 @@ export async function cmdExplain(opts: {
     return { exitCode: ExitCode.Success, stdout, stderr: "" };
   } catch (err) {
     if (err instanceof Error && err.message.startsWith("Invalid model key")) {
-      return { exitCode: ExitCode.UsageError, stdout: "", stderr: err.message + "\n" };
+      return { exitCode: ExitCode.InvalidConfig, stdout: "", stderr: err.message + "\n" };
     }
     return {
       exitCode: ExitCode.InternalError,

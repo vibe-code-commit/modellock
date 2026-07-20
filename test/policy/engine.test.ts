@@ -12,7 +12,7 @@ function fact<T>(
     | "single-source"
     | "conflicting"
     | "stale"
-    | "unavailable" = "multi-source-verified",
+    | "unavailable" = "official-verified",
 ) {
   return {
     value,
@@ -118,7 +118,7 @@ describe("policy engine", () => {
     expect(result.findings.some((f) => f.code === "tool-calling-removal")).toBe(true);
   });
 
-  it("fails on structured-output and vision removal", () => {
+  it("fails on structured-output removal; vision removal is warn-only by default", () => {
     const lockfile = makeDep();
     const registry = makeRegistry({
       ...lockfile.dependencies[0]!.facts,
@@ -127,7 +127,21 @@ describe("policy engine", () => {
     });
     const result = evaluatePolicy({ lockfile, registry, config: defaultConfig() });
     expect(result.findings.some((f) => f.code === "structured-output-removal")).toBe(true);
-    expect(result.findings.some((f) => f.code === "vision-removal")).toBe(true);
+    expect(result.findings.some((f) => f.code === "vision-removal" && f.severity === "fail")).toBe(
+      false,
+    );
+  });
+
+  it("does not fail on multi-source price drift when min blocking is official-verified", () => {
+    const lockfile = makeDep();
+    const registry = makeRegistry({
+      ...lockfile.dependencies[0]!.facts,
+      inputPricePerMillion: fact(5.0, "multi-source-verified"),
+    });
+    const result = evaluatePolicy({ lockfile, registry, config: defaultConfig() });
+    const finding = result.findings.find((f) => f.code === "input-price-increase");
+    expect(finding?.severity).toBe("warn");
+    expect(result.exitCode).toBe(ExitCode.Success);
   });
 
   it("does not block conflicting facts", () => {

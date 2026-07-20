@@ -7,3 +7,4 @@ data/registry/*.json
 data/fixtures/malformed.json
 data/fixtures/malicious-strings.txt
 *.sarif
+MODELLOCK-PLAN.md

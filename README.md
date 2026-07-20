@@ -59,19 +59,24 @@ npx model-lock check
 | Command                               | Purpose                                                                         |
 | ------------------------------------- | ------------------------------------------------------------------------------- |
 | `model-lock init`                     | Discover dependencies, create `.llm-lock.yml` if missing, write `llm.lock.json` |
+| `model-lock scan`                     | Inventory discovered dependencies without writing files                         |
 | `model-lock check`                    | Diff approved lockfile vs current registry and apply policy                     |
 | `model-lock update`                   | Propose a replacement lockfile + Markdown report (`--write` to apply)           |
 | `model-lock explain <provider:model>` | Show approved, current, diffs, policy, confidence, evidence                     |
+| `model-lock validate`                 | Validate config, lockfile, and local registry snapshot                          |
 
 Exit codes:
 
-| Code | Meaning                        |
-| ---- | ------------------------------ |
-| 0    | Success (warnings allowed)     |
-| 1    | Blocking policy failure        |
-| 2    | Invalid CLI usage              |
-| 3    | Invalid config/lockfile/schema |
-| 4    | Unexpected internal error      |
+| Code | Meaning                                      |
+| ---- | -------------------------------------------- |
+| 0    | Success (warnings allowed)                   |
+| 1    | Blocking policy failure                      |
+| 2    | Invalid configuration / CLI usage            |
+| 3    | Invalid lockfile                             |
+| 4    | Registry unavailable with no usable fallback |
+| 5    | Internal error                               |
+| 6    | Unsupported lockfile version                 |
+| 7    | Discovery ambiguity requiring input          |
 
 ## GitHub Action
 

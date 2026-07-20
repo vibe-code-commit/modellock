@@ -26,5 +26,5 @@ export { deprecationsInfoAdapter } from "./sources/deprecations-info.js";
 export { officialProviderAdapter } from "./sources/official-provider.js";
 export { canonicalize, digestJson, sha256 } from "./util/canonical.js";
 export { sanitizeForPrint } from "./sanitize/index.js";
-export { cmdInit, cmdCheck, cmdUpdate, cmdExplain } from "./commands.js";
+export { cmdInit, cmdScan, cmdCheck, cmdUpdate, cmdExplain, cmdValidate } from "./commands.js";
 export { createProgram, runCli } from "./cli.js";

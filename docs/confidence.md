@@ -5,7 +5,7 @@ Every material fact carries a confidence classification.
 | Level                   | Meaning                               | Blocks CI by default? |
 | ----------------------- | ------------------------------------- | --------------------- |
 | `official-verified`     | Agrees with curated official evidence | Yes                   |
-| `multi-source-verified` | Independent sources agree             | Yes                   |
+| `multi-source-verified` | Independent sources agree             | No (raise floor)      |
 | `single-source`         | Only one source reported a value      | No                    |
 | `conflicting`           | Sources disagree; value withheld      | Never                 |
 | `stale`                 | Only aged observations remain         | No (warn)             |
@@ -23,6 +23,7 @@ Every material fact carries a confidence classification.
 - Official pack agreement can raise to `official-verified`
 - Disagreement yields `conflicting` with `candidates` and `value: null`
 - Missing fields stay `null` / `unavailable` (never invented)
-- Policy `minBlockingConfidence` controls the blocking floor
+- Policy `minBlockingConfidence` controls the blocking floor (default: `official-verified`)
 
-Only `official-verified` and `multi-source-verified` facts may block CI unless you deliberately lower `minBlockingConfidence`.
+By default only `official-verified` facts may block CI. Lower `minBlockingConfidence` to
+`multi-source-verified` (or below) if you want multi-source agreement to block as well.

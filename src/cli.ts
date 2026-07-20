@@ -1,7 +1,7 @@
 import { Command } from "commander";
 import { PACKAGE_VERSION } from "./types/constants.js";
 import { ExitCode } from "./types/schemas.js";
-import { cmdInit, cmdCheck, cmdUpdate, cmdExplain } from "./commands.js";
+import { cmdInit, cmdCheck, cmdUpdate, cmdExplain, cmdScan, cmdValidate } from "./commands.js";
 import { omitUndefined } from "./util/omit-undefined.js";
 
 export function createProgram(): Command {
@@ -17,14 +17,34 @@ export function createProgram(): Command {
     .option("--cwd <path>", "Working directory", process.cwd())
     .option("--data-dir <path>", "Path to ModelLock data directory")
     .option("--network", "Allow network refresh of registry sources", false)
-    .action(async (opts: { cwd: string; dataDir?: string; network?: boolean }) => {
+    .option("--force", "Overwrite an existing llm.lock.json", false)
+    .action(async (opts: { cwd: string; dataDir?: string; network?: boolean; force?: boolean }) => {
       const result = await cmdInit(
         omitUndefined({
           cwd: opts.cwd,
           dataDir: opts.dataDir,
           allowNetwork: opts.network,
+          force: opts.force,
         }),
       );
+      process.stdout.write(result.stdout);
+      process.stderr.write(result.stderr);
+      process.exitCode = result.exitCode;
+    });
+
+  program
+    .command("scan")
+    .description("Inventory discovered model dependencies without writing files")
+    .option("--cwd <path>", "Working directory", process.cwd())
+    .option("--format <format>", "Output format: human | json", "human")
+    .action(async (opts: { cwd: string; format?: string }) => {
+      const format = opts.format ?? "human";
+      if (format !== "human" && format !== "json") {
+        process.stderr.write(`Invalid --format: ${format}\n`);
+        process.exitCode = ExitCode.InvalidConfig;
+        return;
+      }
+      const result = await cmdScan(omitUndefined({ cwd: opts.cwd, format }));
       process.stdout.write(result.stdout);
       process.stderr.write(result.stderr);
       process.exitCode = result.exitCode;
@@ -49,7 +69,7 @@ export function createProgram(): Command {
         const format = opts.format ?? "human";
         if (format !== "human" && format !== "json" && format !== "sarif") {
           process.stderr.write(`Invalid --format: ${format}\n`);
-          process.exitCode = ExitCode.UsageError;
+          process.exitCode = ExitCode.InvalidConfig;
           return;
         }
         const result = await cmdCheck(
@@ -120,6 +140,23 @@ export function createProgram(): Command {
       process.exitCode = result.exitCode;
     });
 
+  program
+    .command("validate")
+    .description("Validate configuration, lockfile, and local registry snapshot")
+    .option("--cwd <path>", "Working directory", process.cwd())
+    .option("--data-dir <path>", "Path to ModelLock data directory")
+    .action(async (opts: { cwd: string; dataDir?: string }) => {
+      const result = await cmdValidate(
+        omitUndefined({
+          cwd: opts.cwd,
+          dataDir: opts.dataDir,
+        }),
+      );
+      process.stdout.write(result.stdout);
+      process.stderr.write(result.stderr);
+      process.exitCode = result.exitCode;
+    });
+
   return program;
 }
 
@@ -140,6 +177,6 @@ const isDirect =
 if (isDirect) {
   runCli().catch((err: unknown) => {
     console.error(err instanceof Error ? err.message : err);
-    process.exitCode = 4;
+    process.exitCode = ExitCode.InternalError;
   });
 }

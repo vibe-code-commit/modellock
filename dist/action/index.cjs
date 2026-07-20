@@ -70437,19 +70437,19 @@ var ConfigSchema = external_exports.object({
   policy: external_exports.object({
     floatingAliases: FloatingAliasPolicySchema.default("warn"),
     retirementWindowDays: external_exports.number().int().nonnegative().default(90),
-    maxInputPriceIncreasePercent: external_exports.number().nonnegative().default(10),
-    maxOutputPriceIncreasePercent: external_exports.number().nonnegative().default(10),
+    maxInputPriceIncreasePercent: external_exports.number().nonnegative().default(15),
+    maxOutputPriceIncreasePercent: external_exports.number().nonnegative().default(15),
     failOnContextDecrease: external_exports.boolean().default(true),
     failOnMaxOutputDecrease: external_exports.boolean().default(true),
     failOnToolCallingRemoval: external_exports.boolean().default(true),
     failOnStructuredOutputRemoval: external_exports.boolean().default(true),
-    failOnVisionRemoval: external_exports.boolean().default(true),
+    failOnVisionRemoval: external_exports.boolean().default(false),
     staleSourceBehavior: StaleSourceBehaviorSchema.default("warn"),
-    minBlockingConfidence: ConfidenceSchema.default("multi-source-verified")
+    minBlockingConfidence: ConfidenceSchema.default("official-verified")
   }).default({}),
   sources: external_exports.object({
     allowNetwork: external_exports.boolean().default(false),
-    staleAfterDays: external_exports.number().int().positive().default(14),
+    staleAfterDays: external_exports.number().int().positive().default(7),
     timeoutMs: external_exports.number().int().positive().default(1e4),
     maxBytes: external_exports.number().int().positive().default(8 * 1024 * 1024)
   }).default({})
@@ -70457,9 +70457,16 @@ var ConfigSchema = external_exports.object({
 var ExitCode = {
   Success: 0,
   PolicyFailure: 1,
+  InvalidConfig: 2,
+  InvalidLockfile: 3,
+  RegistryUnavailable: 4,
+  InternalError: 5,
+  UnsupportedLockfileVersion: 6,
+  DiscoveryAmbiguity: 7,
+  /** @deprecated use InvalidConfig */
   UsageError: 2,
-  ValidationError: 3,
-  InternalError: 4
+  /** @deprecated use InvalidLockfile */
+  ValidationError: 3
 };
 var FindingSeveritySchema = external_exports.enum(["pass", "warn", "fail"]);
 var DiffKindSchema = external_exports.enum([
@@ -70606,6 +70613,32 @@ var traverse = import_traverse.default.default ?? import_traverse.default;
 var import_node_fs3 = require("node:fs");
 var import_node_path3 = require("node:path");
 
+// src/network/allowlist.ts
+var ALLOWED_FETCH_HOSTS = /* @__PURE__ */ new Set([
+  "models.dev",
+  "www.models.dev",
+  "deprecations.info",
+  "www.deprecations.info"
+]);
+function isAllowedFetchUrl(urlString) {
+  let url;
+  try {
+    url = new URL(urlString);
+  } catch {
+    return { ok: false, reason: `Invalid URL: ${urlString}` };
+  }
+  if (url.protocol !== "https:") {
+    return { ok: false, reason: `Only HTTPS is allowed (got ${url.protocol})` };
+  }
+  if (!ALLOWED_FETCH_HOSTS.has(url.hostname.toLowerCase())) {
+    return {
+      ok: false,
+      reason: `Hostname not on allowlist: ${url.hostname}`
+    };
+  }
+  return { ok: true, url };
+}
+
 // src/network/fetch.ts
 var NetworkError = class extends Error {
   code;
@@ -70619,58 +70652,97 @@ var NetworkError = class extends Error {
     }
   }
 };
+async function readBodyLimited(res, maxBytes) {
+  const contentLength = res.headers.get("content-length");
+  if (contentLength && Number(contentLength) > maxBytes) {
+    throw new NetworkError(
+      `Response Content-Length ${contentLength} exceeds maxBytes ${maxBytes}`,
+      "oversized"
+    );
+  }
+  const reader = res.body?.getReader();
+  if (!reader) {
+    const text = await res.text();
+    if (Buffer.byteLength(text, "utf8") > maxBytes) {
+      throw new NetworkError(`Response body exceeds maxBytes ${maxBytes}`, "oversized");
+    }
+    return { body: text, bytes: Buffer.byteLength(text) };
+  }
+  const chunks = [];
+  let total = 0;
+  while (true) {
+    const { done, value } = await reader.read();
+    if (done) break;
+    if (value) {
+      total += value.byteLength;
+      if (total > maxBytes) {
+        await reader.cancel();
+        throw new NetworkError(`Response body exceeds maxBytes ${maxBytes}`, "oversized");
+      }
+      chunks.push(value);
+    }
+  }
+  const body = Buffer.concat(chunks.map((c) => Buffer.from(c))).toString("utf8");
+  return { body, bytes: total };
+}
 async function limitedFetch(opts) {
   const fetchImpl = opts.fetchImpl ?? globalThis.fetch;
+  const maxRedirects = opts.maxRedirects ?? 3;
+  const initial = isAllowedFetchUrl(opts.url);
+  if (!initial.ok) {
+    throw new NetworkError(initial.reason, "allowlist");
+  }
+  let currentUrl = initial.url.toString();
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), opts.timeoutMs);
   try {
-    const res = await fetchImpl(opts.url, {
-      method: "GET",
-      signal: controller.signal,
-      headers: {
-        Accept: "application/json, text/plain;q=0.9, */*;q=0.1",
-        "User-Agent": "model-lock/0.1.1 (+https://github.com/vibe-code-commit/model-lock)",
-        ...opts.headers
-      },
-      redirect: "follow"
-    });
-    const contentLength = res.headers.get("content-length");
-    if (contentLength && Number(contentLength) > opts.maxBytes) {
-      throw new NetworkError(
-        `Response Content-Length ${contentLength} exceeds maxBytes ${opts.maxBytes}`,
-        "oversized"
-      );
-    }
-    const reader = res.body?.getReader();
-    if (!reader) {
-      const text = await res.text();
-      if (Buffer.byteLength(text, "utf8") > opts.maxBytes) {
-        throw new NetworkError(`Response body exceeds maxBytes ${opts.maxBytes}`, "oversized");
+    for (let hop = 0; hop <= maxRedirects; hop++) {
+      const allowed = isAllowedFetchUrl(currentUrl);
+      if (!allowed.ok) {
+        throw new NetworkError(allowed.reason, "allowlist");
       }
-      if (!res.ok) {
-        throw new NetworkError(`HTTP ${res.status} for ${opts.url}`, "http");
-      }
-      return { body: text, status: res.status, url: opts.url, bytes: Buffer.byteLength(text) };
-    }
-    const chunks = [];
-    let total = 0;
-    while (true) {
-      const { done, value } = await reader.read();
-      if (done) break;
-      if (value) {
-        total += value.byteLength;
-        if (total > opts.maxBytes) {
-          await reader.cancel();
-          throw new NetworkError(`Response body exceeds maxBytes ${opts.maxBytes}`, "oversized");
+      const res = await fetchImpl(currentUrl, {
+        method: "GET",
+        signal: controller.signal,
+        headers: {
+          Accept: "application/json, text/plain;q=0.9, */*;q=0.1",
+          "User-Agent": "model-lock/0.1.1 (+https://github.com/vibe-code-commit/model-lock)",
+          ...opts.headers
+        },
+        redirect: "manual"
+      });
+      if (res.status >= 300 && res.status < 400) {
+        const location = res.headers.get("location");
+        if (!location) {
+          throw new NetworkError(`Redirect without Location from ${currentUrl}`, "http");
         }
-        chunks.push(value);
+        const next = new URL(location, currentUrl).toString();
+        const nextAllowed = isAllowedFetchUrl(next);
+        if (!nextAllowed.ok) {
+          throw new NetworkError(
+            `Redirect to unapproved host rejected: ${nextAllowed.reason}`,
+            "allowlist"
+          );
+        }
+        currentUrl = next;
+        continue;
       }
+      const { body, bytes } = await readBodyLimited(res, opts.maxBytes);
+      if (!res.ok) {
+        throw new NetworkError(`HTTP ${res.status} for ${currentUrl}`, "http");
+      }
+      const contentType = res.headers.get("content-type") ?? "";
+      if (contentType && !/application\/json|text\/json|text\/plain|\+json/i.test(contentType) && !contentType.includes("javascript")) {
+        if (/text\/html/i.test(contentType)) {
+          throw new NetworkError(
+            `Unexpected Content-Type ${contentType} from ${currentUrl}`,
+            "invalid"
+          );
+        }
+      }
+      return { body, status: res.status, url: currentUrl, bytes };
     }
-    const body = Buffer.concat(chunks.map((c) => Buffer.from(c))).toString("utf8");
-    if (!res.ok) {
-      throw new NetworkError(`HTTP ${res.status} for ${opts.url}`, "http");
-    }
-    return { body, status: res.status, url: opts.url, bytes: total };
+    throw new NetworkError(`Too many redirects (max ${maxRedirects}) for ${opts.url}`, "http");
   } catch (err) {
     if (err instanceof NetworkError) throw err;
     if (err instanceof Error && err.name === "AbortError") {
@@ -71107,7 +71179,7 @@ function groupKey(provider, modelId) {
   return modelKey(normalizeProvider(provider), modelId);
 }
 function mergeSourceResults(results, options = {}) {
-  const staleAfterDays = options.staleAfterDays ?? 14;
+  const staleAfterDays = options.staleAfterDays ?? 7;
   const now = /* @__PURE__ */ new Date();
   const warnings = [];
   for (const r of results) {
@@ -71795,13 +71867,21 @@ async function cmdCheck(opts) {
     const lfPath = lockfilePath(opts.cwd);
     if (!(0, import_node_fs5.existsSync)(lfPath)) {
       return {
-        exitCode: ExitCode.ValidationError,
+        exitCode: ExitCode.InvalidLockfile,
         stdout: "",
         stderr: `Missing ${LOCKFILE_FILENAME}. Run \`model-lock init\` first.
 `
       };
     }
     const lockfile = readLockfile(lfPath);
+    if (lockfile.lockfileVersion !== 1) {
+      return {
+        exitCode: ExitCode.UnsupportedLockfileVersion,
+        stdout: "",
+        stderr: `Unsupported lockfileVersion: ${String(lockfile.lockfileVersion)}
+`
+      };
+    }
     const dataDir = resolveDataDir(opts.dataDir);
     const { registry, warnings } = await loadCurrentRegistry({
       dataDir,
@@ -71827,7 +71907,11 @@ async function cmdCheck(opts) {
     return { exitCode, stdout, stderr: "" };
   } catch (err) {
     if (err instanceof LockfileValidationError) {
-      return { exitCode: ExitCode.ValidationError, stdout: "", stderr: err.message + "\n" };
+      const msg = err.message;
+      if (/version|lockfileVersion/i.test(msg)) {
+        return { exitCode: ExitCode.UnsupportedLockfileVersion, stdout: "", stderr: msg + "\n" };
+      }
+      return { exitCode: ExitCode.InvalidLockfile, stdout: "", stderr: msg + "\n" };
     }
     return {
       exitCode: ExitCode.InternalError,

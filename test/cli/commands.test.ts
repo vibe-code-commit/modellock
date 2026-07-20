@@ -2,7 +2,14 @@ import { describe, it, expect } from "vitest";
 import { mkdtempSync, rmSync, mkdirSync, writeFileSync, readFileSync, existsSync } from "node:fs";
 import { join } from "node:path";
 import { tmpdir } from "node:os";
-import { cmdInit, cmdCheck, cmdUpdate, cmdExplain } from "../../src/commands.js";
+import {
+  cmdInit,
+  cmdCheck,
+  cmdUpdate,
+  cmdExplain,
+  cmdScan,
+  cmdValidate,
+} from "../../src/commands.js";
 import { ExitCode } from "../../src/types/schemas.js";
 
 function fixtureProject(): string {
@@ -31,6 +38,59 @@ describe("CLI commands", () => {
       expect(existsSync(join(dir, ".llm-lock.yml"))).toBe(true);
       expect(existsSync(join(dir, "llm.lock.json"))).toBe(true);
       expect(readFileSync(join(dir, "src", "app.ts"), "utf8")).toBe(before);
+    } finally {
+      rmSync(dir, { recursive: true, force: true });
+    }
+  });
+
+  it("init refuses overwrite without --force", async () => {
+    const dir = fixtureProject();
+    const dataDir = join(process.cwd(), "data");
+    try {
+      await cmdInit({ cwd: dir, dataDir, allowNetwork: false });
+      const again = await cmdInit({ cwd: dir, dataDir, allowNetwork: false });
+      expect(again.exitCode).toBe(ExitCode.InvalidConfig);
+      expect(again.stderr).toMatch(/--force/);
+      const forced = await cmdInit({ cwd: dir, dataDir, allowNetwork: false, force: true });
+      expect(forced.exitCode).toBe(ExitCode.Success);
+    } finally {
+      rmSync(dir, { recursive: true, force: true });
+    }
+  });
+
+  it("scan inventories without writing files", async () => {
+    const dir = fixtureProject();
+    try {
+      const result = await cmdScan({ cwd: dir, format: "json" });
+      expect(result.exitCode).toBe(ExitCode.Success);
+      expect(existsSync(join(dir, "llm.lock.json"))).toBe(false);
+      const parsed = JSON.parse(result.stdout) as { dependencies: unknown[] };
+      expect(parsed.dependencies.length).toBeGreaterThan(0);
+    } finally {
+      rmSync(dir, { recursive: true, force: true });
+    }
+  });
+
+  it("validate checks lockfile and registry", async () => {
+    const dir = fixtureProject();
+    const dataDir = join(process.cwd(), "data");
+    try {
+      const missing = await cmdValidate({ cwd: dir, dataDir });
+      expect(missing.exitCode).toBe(ExitCode.InvalidLockfile);
+      await cmdInit({ cwd: dir, dataDir, allowNetwork: false });
+      const ok = await cmdValidate({ cwd: dir, dataDir });
+      expect(ok.exitCode).toBe(ExitCode.Success);
+    } finally {
+      rmSync(dir, { recursive: true, force: true });
+    }
+  });
+
+  it("check returns InvalidLockfile when lockfile missing", async () => {
+    const dir = fixtureProject();
+    const dataDir = join(process.cwd(), "data");
+    try {
+      const result = await cmdCheck({ cwd: dir, dataDir, allowNetwork: false });
+      expect(result.exitCode).toBe(ExitCode.InvalidLockfile);
     } finally {
       rmSync(dir, { recursive: true, force: true });
     }

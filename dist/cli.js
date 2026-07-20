@@ -191,19 +191,19 @@ var ConfigSchema = z.object({
   policy: z.object({
     floatingAliases: FloatingAliasPolicySchema.default("warn"),
     retirementWindowDays: z.number().int().nonnegative().default(90),
-    maxInputPriceIncreasePercent: z.number().nonnegative().default(10),
-    maxOutputPriceIncreasePercent: z.number().nonnegative().default(10),
+    maxInputPriceIncreasePercent: z.number().nonnegative().default(15),
+    maxOutputPriceIncreasePercent: z.number().nonnegative().default(15),
     failOnContextDecrease: z.boolean().default(true),
     failOnMaxOutputDecrease: z.boolean().default(true),
     failOnToolCallingRemoval: z.boolean().default(true),
     failOnStructuredOutputRemoval: z.boolean().default(true),
-    failOnVisionRemoval: z.boolean().default(true),
+    failOnVisionRemoval: z.boolean().default(false),
     staleSourceBehavior: StaleSourceBehaviorSchema.default("warn"),
-    minBlockingConfidence: ConfidenceSchema.default("multi-source-verified")
+    minBlockingConfidence: ConfidenceSchema.default("official-verified")
   }).default({}),
   sources: z.object({
     allowNetwork: z.boolean().default(false),
-    staleAfterDays: z.number().int().positive().default(14),
+    staleAfterDays: z.number().int().positive().default(7),
     timeoutMs: z.number().int().positive().default(1e4),
     maxBytes: z.number().int().positive().default(8 * 1024 * 1024)
   }).default({})
@@ -211,9 +211,16 @@ var ConfigSchema = z.object({
 var ExitCode = {
   Success: 0,
   PolicyFailure: 1,
+  InvalidConfig: 2,
+  InvalidLockfile: 3,
+  RegistryUnavailable: 4,
+  InternalError: 5,
+  UnsupportedLockfileVersion: 6,
+  DiscoveryAmbiguity: 7,
+  /** @deprecated use InvalidConfig */
   UsageError: 2,
-  ValidationError: 3,
-  InternalError: 4
+  /** @deprecated use InvalidLockfile */
+  ValidationError: 3
 };
 var FindingSeveritySchema = z.enum(["pass", "warn", "fail"]);
 var DiffKindSchema = z.enum([
@@ -767,6 +774,32 @@ import {
 } from "node:fs";
 import { join as join4 } from "node:path";
 
+// src/network/allowlist.ts
+var ALLOWED_FETCH_HOSTS = /* @__PURE__ */ new Set([
+  "models.dev",
+  "www.models.dev",
+  "deprecations.info",
+  "www.deprecations.info"
+]);
+function isAllowedFetchUrl(urlString) {
+  let url;
+  try {
+    url = new URL(urlString);
+  } catch {
+    return { ok: false, reason: `Invalid URL: ${urlString}` };
+  }
+  if (url.protocol !== "https:") {
+    return { ok: false, reason: `Only HTTPS is allowed (got ${url.protocol})` };
+  }
+  if (!ALLOWED_FETCH_HOSTS.has(url.hostname.toLowerCase())) {
+    return {
+      ok: false,
+      reason: `Hostname not on allowlist: ${url.hostname}`
+    };
+  }
+  return { ok: true, url };
+}
+
 // src/network/fetch.ts
 var NetworkError = class extends Error {
   code;
@@ -780,58 +813,97 @@ var NetworkError = class extends Error {
     }
   }
 };
+async function readBodyLimited(res, maxBytes) {
+  const contentLength = res.headers.get("content-length");
+  if (contentLength && Number(contentLength) > maxBytes) {
+    throw new NetworkError(
+      `Response Content-Length ${contentLength} exceeds maxBytes ${maxBytes}`,
+      "oversized"
+    );
+  }
+  const reader = res.body?.getReader();
+  if (!reader) {
+    const text = await res.text();
+    if (Buffer.byteLength(text, "utf8") > maxBytes) {
+      throw new NetworkError(`Response body exceeds maxBytes ${maxBytes}`, "oversized");
+    }
+    return { body: text, bytes: Buffer.byteLength(text) };
+  }
+  const chunks = [];
+  let total = 0;
+  while (true) {
+    const { done, value } = await reader.read();
+    if (done) break;
+    if (value) {
+      total += value.byteLength;
+      if (total > maxBytes) {
+        await reader.cancel();
+        throw new NetworkError(`Response body exceeds maxBytes ${maxBytes}`, "oversized");
+      }
+      chunks.push(value);
+    }
+  }
+  const body = Buffer.concat(chunks.map((c) => Buffer.from(c))).toString("utf8");
+  return { body, bytes: total };
+}
 async function limitedFetch(opts) {
   const fetchImpl = opts.fetchImpl ?? globalThis.fetch;
+  const maxRedirects = opts.maxRedirects ?? 3;
+  const initial = isAllowedFetchUrl(opts.url);
+  if (!initial.ok) {
+    throw new NetworkError(initial.reason, "allowlist");
+  }
+  let currentUrl = initial.url.toString();
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), opts.timeoutMs);
   try {
-    const res = await fetchImpl(opts.url, {
-      method: "GET",
-      signal: controller.signal,
-      headers: {
-        Accept: "application/json, text/plain;q=0.9, */*;q=0.1",
-        "User-Agent": "model-lock/0.1.1 (+https://github.com/vibe-code-commit/model-lock)",
-        ...opts.headers
-      },
-      redirect: "follow"
-    });
-    const contentLength = res.headers.get("content-length");
-    if (contentLength && Number(contentLength) > opts.maxBytes) {
-      throw new NetworkError(
-        `Response Content-Length ${contentLength} exceeds maxBytes ${opts.maxBytes}`,
-        "oversized"
-      );
-    }
-    const reader = res.body?.getReader();
-    if (!reader) {
-      const text = await res.text();
-      if (Buffer.byteLength(text, "utf8") > opts.maxBytes) {
-        throw new NetworkError(`Response body exceeds maxBytes ${opts.maxBytes}`, "oversized");
+    for (let hop = 0; hop <= maxRedirects; hop++) {
+      const allowed = isAllowedFetchUrl(currentUrl);
+      if (!allowed.ok) {
+        throw new NetworkError(allowed.reason, "allowlist");
       }
-      if (!res.ok) {
-        throw new NetworkError(`HTTP ${res.status} for ${opts.url}`, "http");
-      }
-      return { body: text, status: res.status, url: opts.url, bytes: Buffer.byteLength(text) };
-    }
-    const chunks = [];
-    let total = 0;
-    while (true) {
-      const { done, value } = await reader.read();
-      if (done) break;
-      if (value) {
-        total += value.byteLength;
-        if (total > opts.maxBytes) {
-          await reader.cancel();
-          throw new NetworkError(`Response body exceeds maxBytes ${opts.maxBytes}`, "oversized");
+      const res = await fetchImpl(currentUrl, {
+        method: "GET",
+        signal: controller.signal,
+        headers: {
+          Accept: "application/json, text/plain;q=0.9, */*;q=0.1",
+          "User-Agent": "model-lock/0.1.1 (+https://github.com/vibe-code-commit/model-lock)",
+          ...opts.headers
+        },
+        redirect: "manual"
+      });
+      if (res.status >= 300 && res.status < 400) {
+        const location = res.headers.get("location");
+        if (!location) {
+          throw new NetworkError(`Redirect without Location from ${currentUrl}`, "http");
         }
-        chunks.push(value);
+        const next = new URL(location, currentUrl).toString();
+        const nextAllowed = isAllowedFetchUrl(next);
+        if (!nextAllowed.ok) {
+          throw new NetworkError(
+            `Redirect to unapproved host rejected: ${nextAllowed.reason}`,
+            "allowlist"
+          );
+        }
+        currentUrl = next;
+        continue;
       }
+      const { body, bytes } = await readBodyLimited(res, opts.maxBytes);
+      if (!res.ok) {
+        throw new NetworkError(`HTTP ${res.status} for ${currentUrl}`, "http");
+      }
+      const contentType = res.headers.get("content-type") ?? "";
+      if (contentType && !/application\/json|text\/json|text\/plain|\+json/i.test(contentType) && !contentType.includes("javascript")) {
+        if (/text\/html/i.test(contentType)) {
+          throw new NetworkError(
+            `Unexpected Content-Type ${contentType} from ${currentUrl}`,
+            "invalid"
+          );
+        }
+      }
+      return { body, status: res.status, url: currentUrl, bytes };
     }
-    const body = Buffer.concat(chunks.map((c) => Buffer.from(c))).toString("utf8");
-    if (!res.ok) {
-      throw new NetworkError(`HTTP ${res.status} for ${opts.url}`, "http");
-    }
-    return { body, status: res.status, url: opts.url, bytes: total };
+    throw new NetworkError(`Too many redirects (max ${maxRedirects}) for ${opts.url}`, "http");
   } catch (err) {
     if (err instanceof NetworkError) throw err;
     if (err instanceof Error && err.name === "AbortError") {
@@ -1281,7 +1353,7 @@ function groupKey(provider, modelId) {
   return modelKey(normalizeProvider(provider), modelId);
 }
 function mergeSourceResults(results, options = {}) {
-  const staleAfterDays = options.staleAfterDays ?? 14;
+  const staleAfterDays = options.staleAfterDays ?? 7;
   const now = /* @__PURE__ */ new Date();
   const warnings = [];
   for (const r of results) {
@@ -2225,10 +2297,20 @@ function resolveDataDir(explicit) {
 async function cmdInit(opts) {
   try {
     const cwd = opts.cwd;
+    const lfPath = lockfilePath(cwd);
+    const configPath = join6(cwd, CONFIG_FILENAME);
+    if (!opts.force && existsSync5(lfPath)) {
+      return {
+        exitCode: ExitCode.InvalidConfig,
+        stdout: "",
+        stderr: `${LOCKFILE_FILENAME} already exists. Re-run with --force to overwrite.
+`
+      };
+    }
     const { config, path: existingConfig, digest } = loadConfig(cwd);
     if (!existingConfig) {
       const yaml3 = configToYaml(defaultConfig());
-      writeFileSync3(join6(cwd, CONFIG_FILENAME), yaml3, "utf8");
+      writeFileSync3(configPath, yaml3, "utf8");
     }
     const dataDir = resolveDataDir(opts.dataDir);
     const { registry, warnings } = await loadCurrentRegistry({
@@ -2248,19 +2330,107 @@ async function cmdInit(opts) {
       config,
       configDigest: digest
     });
-    writeLockfile(lockfilePath(cwd), lockfile);
+    writeLockfile(lfPath, lockfile);
     const lines = [
       `Created ${existingConfig ? "lockfile" : `${CONFIG_FILENAME} and lockfile`}`,
       `Dependencies: ${lockfile.dependencies.length}`,
-      ...warnings.map((w) => `Warning: ${sanitizeLine(w)}`)
+      ...warnings.map((w) => `Warning: ${sanitizeLine(w)}`),
+      ...detected.filter((d) => d.lowConfidence).map(
+        (d) => `Warning: low-confidence discovery ${d.provider}:${d.modelId} (marked in lockfile)`
+      )
     ];
     return { exitCode: ExitCode.Success, stdout: lines.join("\n") + "\n", stderr: "" };
   } catch (err) {
     if (err instanceof LockfileValidationError) {
-      return { exitCode: ExitCode.ValidationError, stdout: "", stderr: err.message + "\n" };
+      return { exitCode: ExitCode.InvalidLockfile, stdout: "", stderr: err.message + "\n" };
     }
     return {
       exitCode: ExitCode.InternalError,
+      stdout: "",
+      stderr: (err instanceof Error ? err.message : String(err)) + "\n"
+    };
+  }
+}
+async function cmdScan(opts) {
+  try {
+    const { config } = loadConfig(opts.cwd);
+    const detected = discoverDependencies(opts.cwd, config);
+    if (opts.format === "json") {
+      return {
+        exitCode: ExitCode.Success,
+        stdout: JSON.stringify({ dependencies: detected }, null, 2) + "\n",
+        stderr: ""
+      };
+    }
+    const lines = detected.map((d) => {
+      const occ = d.occurrences[0];
+      const loc = occ ? `${occ.path}:${occ.line}` : "";
+      const low = d.lowConfidence ? " low-confidence" : "";
+      return `${d.provider}:${d.modelId} (${d.identifierKind}, conf=${d.confidence.toFixed(2)}${low}) ${loc}`;
+    });
+    if (lines.length === 0) lines.push("No model dependencies discovered.");
+    return { exitCode: ExitCode.Success, stdout: lines.join("\n") + "\n", stderr: "" };
+  } catch (err) {
+    return {
+      exitCode: ExitCode.InternalError,
+      stdout: "",
+      stderr: (err instanceof Error ? err.message : String(err)) + "\n"
+    };
+  }
+}
+async function cmdValidate(opts) {
+  try {
+    const { config, path: configPath } = loadConfig(opts.cwd);
+    void config;
+    const lfPath = lockfilePath(opts.cwd);
+    if (!existsSync5(lfPath)) {
+      return {
+        exitCode: ExitCode.InvalidLockfile,
+        stdout: "",
+        stderr: `Missing ${LOCKFILE_FILENAME}
+`
+      };
+    }
+    try {
+      const lockfile = readLockfile(lfPath);
+      if (lockfile.lockfileVersion !== 1) {
+        return {
+          exitCode: ExitCode.UnsupportedLockfileVersion,
+          stdout: "",
+          stderr: `Unsupported lockfileVersion: ${String(lockfile.lockfileVersion)}
+`
+        };
+      }
+    } catch (err) {
+      if (err instanceof LockfileValidationError) {
+        const msg = err.message;
+        if (/version|lockfileVersion/i.test(msg)) {
+          return { exitCode: ExitCode.UnsupportedLockfileVersion, stdout: "", stderr: msg + "\n" };
+        }
+        return { exitCode: ExitCode.InvalidLockfile, stdout: "", stderr: msg + "\n" };
+      }
+      throw err;
+    }
+    const dataDir = resolveDataDir(opts.dataDir);
+    try {
+      loadRegistrySnapshot(dataDir);
+    } catch (err) {
+      return {
+        exitCode: ExitCode.RegistryUnavailable,
+        stdout: "",
+        stderr: `Registry invalid: ${err instanceof Error ? err.message : String(err)}
+`
+      };
+    }
+    const lines = [
+      `Config: ${configPath ?? "(defaults)"} OK`,
+      `Lockfile: ${lfPath} OK`,
+      `Registry: ${dataDir} OK`
+    ];
+    return { exitCode: ExitCode.Success, stdout: lines.join("\n") + "\n", stderr: "" };
+  } catch (err) {
+    return {
+      exitCode: ExitCode.InvalidConfig,
       stdout: "",
       stderr: (err instanceof Error ? err.message : String(err)) + "\n"
     };
@@ -2273,13 +2443,21 @@ async function cmdCheck(opts) {
     const lfPath = lockfilePath(opts.cwd);
     if (!existsSync5(lfPath)) {
       return {
-        exitCode: ExitCode.ValidationError,
+        exitCode: ExitCode.InvalidLockfile,
         stdout: "",
         stderr: `Missing ${LOCKFILE_FILENAME}. Run \`model-lock init\` first.
 `
       };
     }
     const lockfile = readLockfile(lfPath);
+    if (lockfile.lockfileVersion !== 1) {
+      return {
+        exitCode: ExitCode.UnsupportedLockfileVersion,
+        stdout: "",
+        stderr: `Unsupported lockfileVersion: ${String(lockfile.lockfileVersion)}
+`
+      };
+    }
     const dataDir = resolveDataDir(opts.dataDir);
     const { registry, warnings } = await loadCurrentRegistry({
       dataDir,
@@ -2305,7 +2483,11 @@ async function cmdCheck(opts) {
     return { exitCode, stdout, stderr: "" };
   } catch (err) {
     if (err instanceof LockfileValidationError) {
-      return { exitCode: ExitCode.ValidationError, stdout: "", stderr: err.message + "\n" };
+      const msg = err.message;
+      if (/version|lockfileVersion/i.test(msg)) {
+        return { exitCode: ExitCode.UnsupportedLockfileVersion, stdout: "", stderr: msg + "\n" };
+      }
+      return { exitCode: ExitCode.InvalidLockfile, stdout: "", stderr: msg + "\n" };
     }
     return {
       exitCode: ExitCode.InternalError,
@@ -2362,7 +2544,7 @@ async function cmdUpdate(opts) {
     return { exitCode: ExitCode.Success, stdout: lines.join("\n") + "\n", stderr: "" };
   } catch (err) {
     if (err instanceof LockfileValidationError) {
-      return { exitCode: ExitCode.ValidationError, stdout: "", stderr: err.message + "\n" };
+      return { exitCode: ExitCode.InvalidLockfile, stdout: "", stderr: err.message + "\n" };
     }
     return {
       exitCode: ExitCode.InternalError,
@@ -2379,7 +2561,7 @@ async function cmdExplain(opts) {
     const lfPath = lockfilePath(opts.cwd);
     if (!existsSync5(lfPath)) {
       return {
-        exitCode: ExitCode.ValidationError,
+        exitCode: ExitCode.InvalidLockfile,
         stdout: "",
         stderr: `Missing ${LOCKFILE_FILENAME}
 `
@@ -2389,7 +2571,7 @@ async function cmdExplain(opts) {
     const approved = lockfile.dependencies.find((d) => d.key === key);
     if (!approved) {
       return {
-        exitCode: ExitCode.UsageError,
+        exitCode: ExitCode.InvalidConfig,
         stdout: "",
         stderr: `Model ${key} not found in lockfile
 `
@@ -2426,7 +2608,7 @@ async function cmdExplain(opts) {
     return { exitCode: ExitCode.Success, stdout, stderr: "" };
   } catch (err) {
     if (err instanceof Error && err.message.startsWith("Invalid model key")) {
-      return { exitCode: ExitCode.UsageError, stdout: "", stderr: err.message + "\n" };
+      return { exitCode: ExitCode.InvalidConfig, stdout: "", stderr: err.message + "\n" };
     }
     return {
       exitCode: ExitCode.InternalError,
@@ -2440,14 +2622,28 @@ async function cmdExplain(opts) {
 function createProgram() {
   const program = new Command();
   program.name("model-lock").description("package-lock.json for AI model dependencies").version(PACKAGE_VERSION);
-  program.command("init").description("Discover model dependencies and create llm.lock.json").option("--cwd <path>", "Working directory", process.cwd()).option("--data-dir <path>", "Path to ModelLock data directory").option("--network", "Allow network refresh of registry sources", false).action(async (opts) => {
+  program.command("init").description("Discover model dependencies and create llm.lock.json").option("--cwd <path>", "Working directory", process.cwd()).option("--data-dir <path>", "Path to ModelLock data directory").option("--network", "Allow network refresh of registry sources", false).option("--force", "Overwrite an existing llm.lock.json", false).action(async (opts) => {
     const result = await cmdInit(
       omitUndefined({
         cwd: opts.cwd,
         dataDir: opts.dataDir,
-        allowNetwork: opts.network
+        allowNetwork: opts.network,
+        force: opts.force
       })
     );
+    process.stdout.write(result.stdout);
+    process.stderr.write(result.stderr);
+    process.exitCode = result.exitCode;
+  });
+  program.command("scan").description("Inventory discovered model dependencies without writing files").option("--cwd <path>", "Working directory", process.cwd()).option("--format <format>", "Output format: human | json", "human").action(async (opts) => {
+    const format = opts.format ?? "human";
+    if (format !== "human" && format !== "json") {
+      process.stderr.write(`Invalid --format: ${format}
+`);
+      process.exitCode = ExitCode.InvalidConfig;
+      return;
+    }
+    const result = await cmdScan(omitUndefined({ cwd: opts.cwd, format }));
     process.stdout.write(result.stdout);
     process.stderr.write(result.stderr);
     process.exitCode = result.exitCode;
@@ -2458,7 +2654,7 @@ function createProgram() {
       if (format !== "human" && format !== "json" && format !== "sarif") {
         process.stderr.write(`Invalid --format: ${format}
 `);
-        process.exitCode = ExitCode.UsageError;
+        process.exitCode = ExitCode.InvalidConfig;
         return;
       }
       const result = await cmdCheck(
@@ -2504,6 +2700,17 @@ function createProgram() {
     process.stderr.write(result.stderr);
     process.exitCode = result.exitCode;
   });
+  program.command("validate").description("Validate configuration, lockfile, and local registry snapshot").option("--cwd <path>", "Working directory", process.cwd()).option("--data-dir <path>", "Path to ModelLock data directory").action(async (opts) => {
+    const result = await cmdValidate(
+      omitUndefined({
+        cwd: opts.cwd,
+        dataDir: opts.dataDir
+      })
+    );
+    process.stdout.write(result.stdout);
+    process.stderr.write(result.stderr);
+    process.exitCode = result.exitCode;
+  });
   return program;
 }
 async function runCli(argv = process.argv) {
@@ -2517,7 +2724,7 @@ var isDirect = process.argv[1] && (process.argv[1].endsWith("cli.ts") || process
 if (isDirect) {
   runCli().catch((err) => {
     console.error(err instanceof Error ? err.message : err);
-    process.exitCode = 4;
+    process.exitCode = ExitCode.InternalError;
   });
 }
 export {

@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-/** Confidence levels for material facts. Only official-verified and multi-source-verified block CI by default. */
+/** Confidence levels for material facts. Blocking requires meeting minBlockingConfidence (default: official-verified). */
 export const ConfidenceSchema = z.enum([
   "official-verified",
   "multi-source-verified",
@@ -11,6 +11,7 @@ export const ConfidenceSchema = z.enum([
 ]);
 export type Confidence = z.infer<typeof ConfidenceSchema>;
 
+/** States that are eligible to block when they meet the configured minimum. */
 export const BLOCKING_CONFIDENCES: readonly Confidence[] = [
   "official-verified",
   "multi-source-verified",
@@ -199,21 +200,21 @@ export const ConfigSchema = z.object({
     .object({
       floatingAliases: FloatingAliasPolicySchema.default("warn"),
       retirementWindowDays: z.number().int().nonnegative().default(90),
-      maxInputPriceIncreasePercent: z.number().nonnegative().default(10),
-      maxOutputPriceIncreasePercent: z.number().nonnegative().default(10),
+      maxInputPriceIncreasePercent: z.number().nonnegative().default(15),
+      maxOutputPriceIncreasePercent: z.number().nonnegative().default(15),
       failOnContextDecrease: z.boolean().default(true),
       failOnMaxOutputDecrease: z.boolean().default(true),
       failOnToolCallingRemoval: z.boolean().default(true),
       failOnStructuredOutputRemoval: z.boolean().default(true),
-      failOnVisionRemoval: z.boolean().default(true),
+      failOnVisionRemoval: z.boolean().default(false),
       staleSourceBehavior: StaleSourceBehaviorSchema.default("warn"),
-      minBlockingConfidence: ConfidenceSchema.default("multi-source-verified"),
+      minBlockingConfidence: ConfidenceSchema.default("official-verified"),
     })
     .default({}),
   sources: z
     .object({
       allowNetwork: z.boolean().default(false),
-      staleAfterDays: z.number().int().positive().default(14),
+      staleAfterDays: z.number().int().positive().default(7),
       timeoutMs: z.number().int().positive().default(10_000),
       maxBytes: z
         .number()
@@ -225,12 +226,20 @@ export const ConfigSchema = z.object({
 });
 export type Config = z.infer<typeof ConfigSchema>;
 
+/** Public CLI/Action exit contract (MODELLOCK-PLAN §14.6). */
 export const ExitCode = {
   Success: 0,
   PolicyFailure: 1,
+  InvalidConfig: 2,
+  InvalidLockfile: 3,
+  RegistryUnavailable: 4,
+  InternalError: 5,
+  UnsupportedLockfileVersion: 6,
+  DiscoveryAmbiguity: 7,
+  /** @deprecated use InvalidConfig */
   UsageError: 2,
+  /** @deprecated use InvalidLockfile */
   ValidationError: 3,
-  InternalError: 4,
 } as const;
 export type ExitCodeValue = (typeof ExitCode)[keyof typeof ExitCode];
 

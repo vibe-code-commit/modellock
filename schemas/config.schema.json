@@ -90,12 +90,12 @@
             "maxInputPriceIncreasePercent": {
               "type": "number",
               "minimum": 0,
-              "default": 10
+              "default": 15
             },
             "maxOutputPriceIncreasePercent": {
               "type": "number",
               "minimum": 0,
-              "default": 10
+              "default": 15
             },
             "failOnContextDecrease": {
               "type": "boolean",
@@ -115,7 +115,7 @@
             },
             "failOnVisionRemoval": {
               "type": "boolean",
-              "default": true
+              "default": false
             },
             "staleSourceBehavior": {
               "type": "string",
@@ -132,7 +132,7 @@
                 "stale",
                 "unavailable"
               ],
-              "default": "multi-source-verified"
+              "default": "official-verified"
             }
           },
           "additionalProperties": false,
@@ -148,7 +148,7 @@
             "staleAfterDays": {
               "type": "integer",
               "exclusiveMinimum": 0,
-              "default": 14
+              "default": 7
             },
             "timeoutMs": {
               "type": "integer",
