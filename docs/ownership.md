@@ -2,9 +2,10 @@
 
 ## Copyright
 
-Copyright (c) 2026 **Rabbott LLC**, a North Carolina limited liability company.
+Copyright 2026 **Rabbott LLC**, a North Carolina limited liability company.
 
-All rights in this repository that are not granted by the MIT License remain with Rabbott LLC.
+All rights in this repository that are not granted by the Apache License,
+Version 2.0 remain with Rabbott LLC.
 
 ## Public surfaces (semi-anonymous operations)
 
@@ -19,9 +20,12 @@ Personal names of individuals are intentionally omitted from public metadata.
 
 ## License
 
-The open-source distribution is MIT. See [LICENSE](../LICENSE).
+The open-source distribution is **Apache-2.0**. See [LICENSE](../LICENSE) and [NOTICE](../NOTICE).
 
-Rabbott LLC may offer separate commercial products, support, or hosted services related to ModelLock. Those are not covered by this MIT grant unless explicitly stated.
+- `model-lock@0.1.0` on npm was published under MIT (historical).
+- `model-lock@0.1.1` and later are Apache-2.0.
+
+Rabbott LLC may offer separate commercial products, support, or hosted services related to ModelLock. Those are not covered by the Apache-2.0 grant unless explicitly stated.
 
 ## Contact
 

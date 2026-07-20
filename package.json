@@ -1,9 +1,9 @@
 {
   "name": "model-lock",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "package-lock.json for AI model dependencies",
   "type": "module",
-  "license": "MIT",
+  "license": "Apache-2.0",
   "author": {
     "name": "Rabbott LLC",
     "url": "https://github.com/vibe-code-commit/model-lock"

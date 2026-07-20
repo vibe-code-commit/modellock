@@ -1,7 +1,12 @@
 ModelLock
-Copyright (c) 2026 Rabbott LLC
+Copyright 2026 Rabbott LLC
 
-This product is owned by Rabbott LLC (North Carolina, USA).
+This product includes software developed by Rabbott LLC
+(North Carolina, USA).
+
 Published operationally via https://github.com/vibe-code-commit/model-lock
+
+Licensed under the Apache License, Version 2.0.
+See the LICENSE file and https://www.apache.org/licenses/LICENSE-2.0
 
 See docs/ownership.md for attribution and commercial notes.

@@ -47,7 +47,7 @@ export async function limitedFetch(opts: LimitedFetchOptions): Promise<LimitedFe
       signal: controller.signal,
       headers: {
         Accept: "application/json, text/plain;q=0.9, */*;q=0.1",
-        "User-Agent": "model-lock/0.1.0 (+https://github.com/vibe-code-commit/model-lock)",
+        "User-Agent": "model-lock/0.1.1 (+https://github.com/vibe-code-commit/model-lock)",
         ...opts.headers,
       },
       redirect: "follow",

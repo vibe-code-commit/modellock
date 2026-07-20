@@ -115,6 +115,6 @@ source contents. See [docs/github-action.md](docs/github-action.md) and
 
 ## License
 
-MIT. Copyright (c) 2026 Rabbott LLC.
+Apache-2.0. Copyright 2026 Rabbott LLC.
 
-See [docs/ownership.md](docs/ownership.md) for copyright and public-surface notes.
+See [LICENSE](LICENSE), [NOTICE](NOTICE), and [docs/ownership.md](docs/ownership.md).

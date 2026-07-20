@@ -70490,7 +70490,7 @@ var PolicyFindingSchema = external_exports.object({
 });
 
 // src/types/constants.ts
-var PACKAGE_VERSION = "0.1.0";
+var PACKAGE_VERSION = "0.1.1";
 var PARSER_VERSION = "1.0.0";
 var CONFIG_FILENAME = ".llm-lock.yml";
 var LOCKFILE_FILENAME = "llm.lock.json";
@@ -70629,7 +70629,7 @@ async function limitedFetch(opts) {
       signal: controller.signal,
       headers: {
         Accept: "application/json, text/plain;q=0.9, */*;q=0.1",
-        "User-Agent": "model-lock/0.1.0 (+https://github.com/vibe-code-commit/model-lock)",
+        "User-Agent": "model-lock/0.1.1 (+https://github.com/vibe-code-commit/model-lock)",
         ...opts.headers
       },
       redirect: "follow"
