@@ -13,20 +13,15 @@ Operational GitHub publisher: **[vibe-code-commit/model-lock](https://github.com
 | Branch protection on main               | Done (no force-push, linear history)                          |
 | Commit author uses GitHub noreply email | Done                                                          |
 | npm login as `vibe-code-commit`         | Done                                                          |
-| npm package `model-lock` published      | Blocked: npm requires 2FA / granular token to publish         |
+| npm package `model-lock` published      | Done (`model-lock@0.1.0`)                                     |
 | Domain `modellock.dev` / `.io`          | Appears unregistered (buy manually)                           |
 | Domain `modellock.com`                  | Taken (do not rely on it)                                     |
 | USPTO / NC trademark filing             | Manual legal step                                             |
 
-## Finish npm claim (required)
+## Immediate security
 
-1. Enable 2FA on the npm account: https://www.npmjs.com/settings/~/account/recovery
-2. Create a granular access token with **publish** permission for `model-lock`, or finish 2FA setup and re-run:
+Revoke **both** npm granular tokens created for this publish (they were shared in chat). Local auth token config was cleared after publish.
 
-```bash
-npm publish --access public
-```
-
-Prefer later releases via GitHub Actions trusted publishing (OIDC) so local tokens are unnecessary.
+Future releases: prefer GitHub Actions trusted publishing / OIDC in `release.yml` instead of long-lived local tokens.
 
 Personal names are intentionally omitted from public package metadata.
