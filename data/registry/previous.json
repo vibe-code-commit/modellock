@@ -1,0 +1,905 @@
+{
+  "frozen": false,
+  "generatedAt": "2026-07-20T13:40:00.642Z",
+  "generatorVersion": "0.1.0",
+  "models": [
+    {
+      "evidence": [
+        {
+          "contentDigest": "ff1d24e30140db63b9f36b44b72d0e00370a272f4244565cabc2c92ea2cf2c0e",
+          "fetchedAt": "2026-07-20T13:40:00.632Z",
+          "parserVersion": "1.0.0+models-dev.1",
+          "sourceDigest": "ff1d24e30140db63b9f36b44b72d0e00370a272f4244565cabc2c92ea2cf2c0e",
+          "sourceId": "models.dev",
+          "sourceUrl": "https://models.dev/api.json"
+        },
+        {
+          "contentDigest": "ecf1b074933a66a1540f7bca1bf57db4549bc8406f832f204e43337f3827ffc4",
+          "fetchedAt": "2026-07-20T13:40:00.633Z",
+          "parserVersion": "1.0.0+official.1",
+          "sourceDigest": "ecf1b074933a66a1540f7bca1bf57db4549bc8406f832f204e43337f3827ffc4",
+          "sourceId": "official-provider",
+          "sourceUrl": "file:data/official/providers.json"
+        }
+      ],
+      "facts": {
+        "contextLimit": {
+          "confidence": "official-verified",
+          "fetchedAt": "2026-07-20T13:40:00.632Z",
+          "parserVersion": "1.0.0+models-dev.1",
+          "sourceDigest": "ff1d24e30140db63b9f36b44b72d0e00370a272f4244565cabc2c92ea2cf2c0e",
+          "sourceId": "models.dev",
+          "sourceUrl": "https://models.dev/api.json",
+          "value": 200000
+        },
+        "identifierKind": {
+          "confidence": "official-verified",
+          "fetchedAt": "2026-07-20T13:40:00.632Z",
+          "parserVersion": "1.0.0+models-dev.1",
+          "sourceDigest": "ff1d24e30140db63b9f36b44b72d0e00370a272f4244565cabc2c92ea2cf2c0e",
+          "sourceId": "models.dev",
+          "sourceUrl": "https://models.dev/api.json",
+          "value": "fixed"
+        },
+        "inputPricePerMillion": {
+          "confidence": "official-verified",
+          "fetchedAt": "2026-07-20T13:40:00.632Z",
+          "parserVersion": "1.0.0+models-dev.1",
+          "sourceDigest": "ff1d24e30140db63b9f36b44b72d0e00370a272f4244565cabc2c92ea2cf2c0e",
+          "sourceId": "models.dev",
+          "sourceUrl": "https://models.dev/api.json",
+          "value": 3
+        },
+        "lifecycleStatus": {
+          "candidates": [
+            {
+              "fetchedAt": "2026-07-20T13:40:00.632Z",
+              "parserVersion": "1.0.0+models-dev.1",
+              "sourceDigest": "ff1d24e30140db63b9f36b44b72d0e00370a272f4244565cabc2c92ea2cf2c0e",
+              "sourceId": "models.dev",
+              "sourceUrl": "https://models.dev/api.json",
+              "value": "unknown"
+            },
+            {
+              "fetchedAt": "2026-07-20T13:40:00.633Z",
+              "parserVersion": "1.0.0+official.1",
+              "sourceDigest": "ecf1b074933a66a1540f7bca1bf57db4549bc8406f832f204e43337f3827ffc4",
+              "sourceId": "official-provider",
+              "sourceUrl": "file:data/official/providers.json",
+              "value": "active"
+            }
+          ],
+          "confidence": "conflicting",
+          "fetchedAt": "2026-07-20T13:40:00.632Z",
+          "parserVersion": "1.0.0+models-dev.1",
+          "sourceDigest": "ff1d24e30140db63b9f36b44b72d0e00370a272f4244565cabc2c92ea2cf2c0e",
+          "sourceId": "models.dev",
+          "sourceUrl": "https://models.dev/api.json",
+          "value": null
+        },
+        "maxOutputLimit": {
+          "confidence": "official-verified",
+          "fetchedAt": "2026-07-20T13:40:00.632Z",
+          "parserVersion": "1.0.0+models-dev.1",
+          "sourceDigest": "ff1d24e30140db63b9f36b44b72d0e00370a272f4244565cabc2c92ea2cf2c0e",
+          "sourceId": "models.dev",
+          "sourceUrl": "https://models.dev/api.json",
+          "value": 64000
+        },
+        "outputPricePerMillion": {
+          "confidence": "official-verified",
+          "fetchedAt": "2026-07-20T13:40:00.632Z",
+          "parserVersion": "1.0.0+models-dev.1",
+          "sourceDigest": "ff1d24e30140db63b9f36b44b72d0e00370a272f4244565cabc2c92ea2cf2c0e",
+          "sourceId": "models.dev",
+          "sourceUrl": "https://models.dev/api.json",
+          "value": 15
+        },
+        "provider": {
+          "confidence": "multi-source-verified",
+          "fetchedAt": "2026-07-20T13:40:00.632Z",
+          "parserVersion": "1.0.0+models-dev.1",
+          "sourceDigest": "ff1d24e30140db63b9f36b44b72d0e00370a272f4244565cabc2c92ea2cf2c0e",
+          "sourceId": "models.dev",
+          "sourceUrl": "https://models.dev/api.json",
+          "value": "anthropic"
+        },
+        "requestedModelId": {
+          "confidence": "single-source",
+          "fetchedAt": "2026-07-20T13:40:00.632Z",
+          "parserVersion": "1.0.0+models-dev.1",
+          "sourceDigest": "ff1d24e30140db63b9f36b44b72d0e00370a272f4244565cabc2c92ea2cf2c0e",
+          "sourceId": "models.dev",
+          "sourceUrl": "https://models.dev/api.json",
+          "value": "claude-sonnet-4-20250514"
+        },
+        "retirementDate": {
+          "confidence": "unavailable",
+          "fetchedAt": "2026-07-20T13:40:00.632Z",
+          "parserVersion": "1.0.0+models-dev.1",
+          "sourceDigest": "ff1d24e30140db63b9f36b44b72d0e00370a272f4244565cabc2c92ea2cf2c0e",
+          "sourceId": "models.dev",
+          "sourceUrl": "https://models.dev/api.json",
+          "value": null
+        },
+        "structuredOutput": {
+          "confidence": "official-verified",
+          "fetchedAt": "2026-07-20T13:40:00.632Z",
+          "parserVersion": "1.0.0+models-dev.1",
+          "sourceDigest": "ff1d24e30140db63b9f36b44b72d0e00370a272f4244565cabc2c92ea2cf2c0e",
+          "sourceId": "models.dev",
+          "sourceUrl": "https://models.dev/api.json",
+          "value": true
+        },
+        "toolCalling": {
+          "confidence": "official-verified",
+          "fetchedAt": "2026-07-20T13:40:00.632Z",
+          "parserVersion": "1.0.0+models-dev.1",
+          "sourceDigest": "ff1d24e30140db63b9f36b44b72d0e00370a272f4244565cabc2c92ea2cf2c0e",
+          "sourceId": "models.dev",
+          "sourceUrl": "https://models.dev/api.json",
+          "value": true
+        },
+        "vision": {
+          "confidence": "official-verified",
+          "fetchedAt": "2026-07-20T13:40:00.632Z",
+          "parserVersion": "1.0.0+models-dev.1",
+          "sourceDigest": "ff1d24e30140db63b9f36b44b72d0e00370a272f4244565cabc2c92ea2cf2c0e",
+          "sourceId": "models.dev",
+          "sourceUrl": "https://models.dev/api.json",
+          "value": true
+        }
+      },
+      "key": "anthropic:claude-sonnet-4-20250514",
+      "modelId": "claude-sonnet-4-20250514",
+      "provider": "anthropic"
+    },
+    {
+      "evidence": [
+        {
+          "contentDigest": "ff1d24e30140db63b9f36b44b72d0e00370a272f4244565cabc2c92ea2cf2c0e",
+          "fetchedAt": "2026-07-20T13:40:00.632Z",
+          "parserVersion": "1.0.0+models-dev.1",
+          "sourceDigest": "ff1d24e30140db63b9f36b44b72d0e00370a272f4244565cabc2c92ea2cf2c0e",
+          "sourceId": "models.dev",
+          "sourceUrl": "https://models.dev/api.json"
+        },
+        {
+          "contentDigest": "ecf1b074933a66a1540f7bca1bf57db4549bc8406f832f204e43337f3827ffc4",
+          "fetchedAt": "2026-07-20T13:40:00.633Z",
+          "parserVersion": "1.0.0+official.1",
+          "sourceDigest": "ecf1b074933a66a1540f7bca1bf57db4549bc8406f832f204e43337f3827ffc4",
+          "sourceId": "official-provider",
+          "sourceUrl": "file:data/official/providers.json"
+        }
+      ],
+      "facts": {
+        "contextLimit": {
+          "confidence": "official-verified",
+          "fetchedAt": "2026-07-20T13:40:00.632Z",
+          "parserVersion": "1.0.0+models-dev.1",
+          "sourceDigest": "ff1d24e30140db63b9f36b44b72d0e00370a272f4244565cabc2c92ea2cf2c0e",
+          "sourceId": "models.dev",
+          "sourceUrl": "https://models.dev/api.json",
+          "value": 1048576
+        },
+        "identifierKind": {
+          "confidence": "official-verified",
+          "fetchedAt": "2026-07-20T13:40:00.632Z",
+          "parserVersion": "1.0.0+models-dev.1",
+          "sourceDigest": "ff1d24e30140db63b9f36b44b72d0e00370a272f4244565cabc2c92ea2cf2c0e",
+          "sourceId": "models.dev",
+          "sourceUrl": "https://models.dev/api.json",
+          "value": "floating"
+        },
+        "inputPricePerMillion": {
+          "confidence": "official-verified",
+          "fetchedAt": "2026-07-20T13:40:00.632Z",
+          "parserVersion": "1.0.0+models-dev.1",
+          "sourceDigest": "ff1d24e30140db63b9f36b44b72d0e00370a272f4244565cabc2c92ea2cf2c0e",
+          "sourceId": "models.dev",
+          "sourceUrl": "https://models.dev/api.json",
+          "value": 1.25
+        },
+        "lifecycleStatus": {
+          "candidates": [
+            {
+              "fetchedAt": "2026-07-20T13:40:00.632Z",
+              "parserVersion": "1.0.0+models-dev.1",
+              "sourceDigest": "ff1d24e30140db63b9f36b44b72d0e00370a272f4244565cabc2c92ea2cf2c0e",
+              "sourceId": "models.dev",
+              "sourceUrl": "https://models.dev/api.json",
+              "value": "unknown"
+            },
+            {
+              "fetchedAt": "2026-07-20T13:40:00.633Z",
+              "parserVersion": "1.0.0+official.1",
+              "sourceDigest": "ecf1b074933a66a1540f7bca1bf57db4549bc8406f832f204e43337f3827ffc4",
+              "sourceId": "official-provider",
+              "sourceUrl": "file:data/official/providers.json",
+              "value": "active"
+            }
+          ],
+          "confidence": "conflicting",
+          "fetchedAt": "2026-07-20T13:40:00.632Z",
+          "parserVersion": "1.0.0+models-dev.1",
+          "sourceDigest": "ff1d24e30140db63b9f36b44b72d0e00370a272f4244565cabc2c92ea2cf2c0e",
+          "sourceId": "models.dev",
+          "sourceUrl": "https://models.dev/api.json",
+          "value": null
+        },
+        "maxOutputLimit": {
+          "confidence": "official-verified",
+          "fetchedAt": "2026-07-20T13:40:00.632Z",
+          "parserVersion": "1.0.0+models-dev.1",
+          "sourceDigest": "ff1d24e30140db63b9f36b44b72d0e00370a272f4244565cabc2c92ea2cf2c0e",
+          "sourceId": "models.dev",
+          "sourceUrl": "https://models.dev/api.json",
+          "value": 65536
+        },
+        "outputPricePerMillion": {
+          "confidence": "official-verified",
+          "fetchedAt": "2026-07-20T13:40:00.632Z",
+          "parserVersion": "1.0.0+models-dev.1",
+          "sourceDigest": "ff1d24e30140db63b9f36b44b72d0e00370a272f4244565cabc2c92ea2cf2c0e",
+          "sourceId": "models.dev",
+          "sourceUrl": "https://models.dev/api.json",
+          "value": 10
+        },
+        "provider": {
+          "confidence": "multi-source-verified",
+          "fetchedAt": "2026-07-20T13:40:00.632Z",
+          "parserVersion": "1.0.0+models-dev.1",
+          "sourceDigest": "ff1d24e30140db63b9f36b44b72d0e00370a272f4244565cabc2c92ea2cf2c0e",
+          "sourceId": "models.dev",
+          "sourceUrl": "https://models.dev/api.json",
+          "value": "google"
+        },
+        "requestedModelId": {
+          "confidence": "single-source",
+          "fetchedAt": "2026-07-20T13:40:00.632Z",
+          "parserVersion": "1.0.0+models-dev.1",
+          "sourceDigest": "ff1d24e30140db63b9f36b44b72d0e00370a272f4244565cabc2c92ea2cf2c0e",
+          "sourceId": "models.dev",
+          "sourceUrl": "https://models.dev/api.json",
+          "value": "gemini-2.5-pro"
+        },
+        "retirementDate": {
+          "confidence": "unavailable",
+          "fetchedAt": "2026-07-20T13:40:00.632Z",
+          "parserVersion": "1.0.0+models-dev.1",
+          "sourceDigest": "ff1d24e30140db63b9f36b44b72d0e00370a272f4244565cabc2c92ea2cf2c0e",
+          "sourceId": "models.dev",
+          "sourceUrl": "https://models.dev/api.json",
+          "value": null
+        },
+        "structuredOutput": {
+          "confidence": "official-verified",
+          "fetchedAt": "2026-07-20T13:40:00.632Z",
+          "parserVersion": "1.0.0+models-dev.1",
+          "sourceDigest": "ff1d24e30140db63b9f36b44b72d0e00370a272f4244565cabc2c92ea2cf2c0e",
+          "sourceId": "models.dev",
+          "sourceUrl": "https://models.dev/api.json",
+          "value": true
+        },
+        "toolCalling": {
+          "confidence": "official-verified",
+          "fetchedAt": "2026-07-20T13:40:00.632Z",
+          "parserVersion": "1.0.0+models-dev.1",
+          "sourceDigest": "ff1d24e30140db63b9f36b44b72d0e00370a272f4244565cabc2c92ea2cf2c0e",
+          "sourceId": "models.dev",
+          "sourceUrl": "https://models.dev/api.json",
+          "value": true
+        },
+        "vision": {
+          "confidence": "official-verified",
+          "fetchedAt": "2026-07-20T13:40:00.632Z",
+          "parserVersion": "1.0.0+models-dev.1",
+          "sourceDigest": "ff1d24e30140db63b9f36b44b72d0e00370a272f4244565cabc2c92ea2cf2c0e",
+          "sourceId": "models.dev",
+          "sourceUrl": "https://models.dev/api.json",
+          "value": true
+        }
+      },
+      "key": "google:gemini-2.5-pro",
+      "modelId": "gemini-2.5-pro",
+      "provider": "google"
+    },
+    {
+      "evidence": [
+        {
+          "contentDigest": "ff1d24e30140db63b9f36b44b72d0e00370a272f4244565cabc2c92ea2cf2c0e",
+          "fetchedAt": "2026-07-20T13:40:00.632Z",
+          "parserVersion": "1.0.0+models-dev.1",
+          "sourceDigest": "ff1d24e30140db63b9f36b44b72d0e00370a272f4244565cabc2c92ea2cf2c0e",
+          "sourceId": "models.dev",
+          "sourceUrl": "https://models.dev/api.json"
+        },
+        {
+          "contentDigest": "d7bd7eed35fb30c7de9dd933d0c7057db2c870bc4eb09163574cbeda19db5ef6",
+          "fetchedAt": "2026-07-20T13:40:00.633Z",
+          "parserVersion": "1.0.0+deprecations.1",
+          "sourceDigest": "d7bd7eed35fb30c7de9dd933d0c7057db2c870bc4eb09163574cbeda19db5ef6",
+          "sourceId": "deprecations.info",
+          "sourceUrl": "https://deprecations.info/v1/feed.json"
+        },
+        {
+          "contentDigest": "ecf1b074933a66a1540f7bca1bf57db4549bc8406f832f204e43337f3827ffc4",
+          "fetchedAt": "2026-07-20T13:40:00.633Z",
+          "parserVersion": "1.0.0+official.1",
+          "sourceDigest": "ecf1b074933a66a1540f7bca1bf57db4549bc8406f832f204e43337f3827ffc4",
+          "sourceId": "official-provider",
+          "sourceUrl": "file:data/official/providers.json"
+        }
+      ],
+      "facts": {
+        "contextLimit": {
+          "confidence": "official-verified",
+          "fetchedAt": "2026-07-20T13:40:00.632Z",
+          "parserVersion": "1.0.0+models-dev.1",
+          "sourceDigest": "ff1d24e30140db63b9f36b44b72d0e00370a272f4244565cabc2c92ea2cf2c0e",
+          "sourceId": "models.dev",
+          "sourceUrl": "https://models.dev/api.json",
+          "value": 16385
+        },
+        "identifierKind": {
+          "confidence": "official-verified",
+          "fetchedAt": "2026-07-20T13:40:00.632Z",
+          "parserVersion": "1.0.0+models-dev.1",
+          "sourceDigest": "ff1d24e30140db63b9f36b44b72d0e00370a272f4244565cabc2c92ea2cf2c0e",
+          "sourceId": "models.dev",
+          "sourceUrl": "https://models.dev/api.json",
+          "value": "floating"
+        },
+        "inputPricePerMillion": {
+          "confidence": "official-verified",
+          "fetchedAt": "2026-07-20T13:40:00.632Z",
+          "parserVersion": "1.0.0+models-dev.1",
+          "sourceDigest": "ff1d24e30140db63b9f36b44b72d0e00370a272f4244565cabc2c92ea2cf2c0e",
+          "sourceId": "models.dev",
+          "sourceUrl": "https://models.dev/api.json",
+          "value": 0.5
+        },
+        "lifecycleStatus": {
+          "confidence": "official-verified",
+          "fetchedAt": "2026-07-20T13:40:00.632Z",
+          "parserVersion": "1.0.0+models-dev.1",
+          "sourceDigest": "ff1d24e30140db63b9f36b44b72d0e00370a272f4244565cabc2c92ea2cf2c0e",
+          "sourceId": "models.dev",
+          "sourceUrl": "https://models.dev/api.json",
+          "value": "deprecated"
+        },
+        "maxOutputLimit": {
+          "confidence": "official-verified",
+          "fetchedAt": "2026-07-20T13:40:00.632Z",
+          "parserVersion": "1.0.0+models-dev.1",
+          "sourceDigest": "ff1d24e30140db63b9f36b44b72d0e00370a272f4244565cabc2c92ea2cf2c0e",
+          "sourceId": "models.dev",
+          "sourceUrl": "https://models.dev/api.json",
+          "value": 4096
+        },
+        "outputPricePerMillion": {
+          "confidence": "official-verified",
+          "fetchedAt": "2026-07-20T13:40:00.632Z",
+          "parserVersion": "1.0.0+models-dev.1",
+          "sourceDigest": "ff1d24e30140db63b9f36b44b72d0e00370a272f4244565cabc2c92ea2cf2c0e",
+          "sourceId": "models.dev",
+          "sourceUrl": "https://models.dev/api.json",
+          "value": 1.5
+        },
+        "provider": {
+          "confidence": "multi-source-verified",
+          "fetchedAt": "2026-07-20T13:40:00.632Z",
+          "parserVersion": "1.0.0+models-dev.1",
+          "sourceDigest": "ff1d24e30140db63b9f36b44b72d0e00370a272f4244565cabc2c92ea2cf2c0e",
+          "sourceId": "models.dev",
+          "sourceUrl": "https://models.dev/api.json",
+          "value": "openai"
+        },
+        "requestedModelId": {
+          "confidence": "single-source",
+          "fetchedAt": "2026-07-20T13:40:00.632Z",
+          "parserVersion": "1.0.0+models-dev.1",
+          "sourceDigest": "ff1d24e30140db63b9f36b44b72d0e00370a272f4244565cabc2c92ea2cf2c0e",
+          "sourceId": "models.dev",
+          "sourceUrl": "https://models.dev/api.json",
+          "value": "gpt-3.5-turbo"
+        },
+        "retirementDate": {
+          "confidence": "official-verified",
+          "fetchedAt": "2026-07-20T13:40:00.633Z",
+          "parserVersion": "1.0.0+deprecations.1",
+          "sourceDigest": "d7bd7eed35fb30c7de9dd933d0c7057db2c870bc4eb09163574cbeda19db5ef6",
+          "sourceId": "deprecations.info",
+          "sourceUrl": "https://deprecations.info/v1/feed.json",
+          "value": "2026-09-01"
+        },
+        "structuredOutput": {
+          "confidence": "official-verified",
+          "fetchedAt": "2026-07-20T13:40:00.632Z",
+          "parserVersion": "1.0.0+models-dev.1",
+          "sourceDigest": "ff1d24e30140db63b9f36b44b72d0e00370a272f4244565cabc2c92ea2cf2c0e",
+          "sourceId": "models.dev",
+          "sourceUrl": "https://models.dev/api.json",
+          "value": false
+        },
+        "toolCalling": {
+          "confidence": "official-verified",
+          "fetchedAt": "2026-07-20T13:40:00.632Z",
+          "parserVersion": "1.0.0+models-dev.1",
+          "sourceDigest": "ff1d24e30140db63b9f36b44b72d0e00370a272f4244565cabc2c92ea2cf2c0e",
+          "sourceId": "models.dev",
+          "sourceUrl": "https://models.dev/api.json",
+          "value": true
+        },
+        "vision": {
+          "confidence": "official-verified",
+          "fetchedAt": "2026-07-20T13:40:00.632Z",
+          "parserVersion": "1.0.0+models-dev.1",
+          "sourceDigest": "ff1d24e30140db63b9f36b44b72d0e00370a272f4244565cabc2c92ea2cf2c0e",
+          "sourceId": "models.dev",
+          "sourceUrl": "https://models.dev/api.json",
+          "value": false
+        }
+      },
+      "key": "openai:gpt-3.5-turbo",
+      "modelId": "gpt-3.5-turbo",
+      "provider": "openai"
+    },
+    {
+      "evidence": [
+        {
+          "contentDigest": "ff1d24e30140db63b9f36b44b72d0e00370a272f4244565cabc2c92ea2cf2c0e",
+          "fetchedAt": "2026-07-20T13:40:00.632Z",
+          "parserVersion": "1.0.0+models-dev.1",
+          "sourceDigest": "ff1d24e30140db63b9f36b44b72d0e00370a272f4244565cabc2c92ea2cf2c0e",
+          "sourceId": "models.dev",
+          "sourceUrl": "https://models.dev/api.json"
+        },
+        {
+          "contentDigest": "ecf1b074933a66a1540f7bca1bf57db4549bc8406f832f204e43337f3827ffc4",
+          "fetchedAt": "2026-07-20T13:40:00.633Z",
+          "parserVersion": "1.0.0+official.1",
+          "sourceDigest": "ecf1b074933a66a1540f7bca1bf57db4549bc8406f832f204e43337f3827ffc4",
+          "sourceId": "official-provider",
+          "sourceUrl": "file:data/official/providers.json"
+        }
+      ],
+      "facts": {
+        "contextLimit": {
+          "confidence": "official-verified",
+          "fetchedAt": "2026-07-20T13:40:00.632Z",
+          "parserVersion": "1.0.0+models-dev.1",
+          "sourceDigest": "ff1d24e30140db63b9f36b44b72d0e00370a272f4244565cabc2c92ea2cf2c0e",
+          "sourceId": "models.dev",
+          "sourceUrl": "https://models.dev/api.json",
+          "value": 128000
+        },
+        "identifierKind": {
+          "confidence": "official-verified",
+          "fetchedAt": "2026-07-20T13:40:00.632Z",
+          "parserVersion": "1.0.0+models-dev.1",
+          "sourceDigest": "ff1d24e30140db63b9f36b44b72d0e00370a272f4244565cabc2c92ea2cf2c0e",
+          "sourceId": "models.dev",
+          "sourceUrl": "https://models.dev/api.json",
+          "value": "floating"
+        },
+        "inputPricePerMillion": {
+          "confidence": "official-verified",
+          "fetchedAt": "2026-07-20T13:40:00.632Z",
+          "parserVersion": "1.0.0+models-dev.1",
+          "sourceDigest": "ff1d24e30140db63b9f36b44b72d0e00370a272f4244565cabc2c92ea2cf2c0e",
+          "sourceId": "models.dev",
+          "sourceUrl": "https://models.dev/api.json",
+          "value": 2.5
+        },
+        "lifecycleStatus": {
+          "candidates": [
+            {
+              "fetchedAt": "2026-07-20T13:40:00.632Z",
+              "parserVersion": "1.0.0+models-dev.1",
+              "sourceDigest": "ff1d24e30140db63b9f36b44b72d0e00370a272f4244565cabc2c92ea2cf2c0e",
+              "sourceId": "models.dev",
+              "sourceUrl": "https://models.dev/api.json",
+              "value": "unknown"
+            },
+            {
+              "fetchedAt": "2026-07-20T13:40:00.633Z",
+              "parserVersion": "1.0.0+official.1",
+              "sourceDigest": "ecf1b074933a66a1540f7bca1bf57db4549bc8406f832f204e43337f3827ffc4",
+              "sourceId": "official-provider",
+              "sourceUrl": "file:data/official/providers.json",
+              "value": "active"
+            }
+          ],
+          "confidence": "conflicting",
+          "fetchedAt": "2026-07-20T13:40:00.632Z",
+          "parserVersion": "1.0.0+models-dev.1",
+          "sourceDigest": "ff1d24e30140db63b9f36b44b72d0e00370a272f4244565cabc2c92ea2cf2c0e",
+          "sourceId": "models.dev",
+          "sourceUrl": "https://models.dev/api.json",
+          "value": null
+        },
+        "maxOutputLimit": {
+          "confidence": "official-verified",
+          "fetchedAt": "2026-07-20T13:40:00.632Z",
+          "parserVersion": "1.0.0+models-dev.1",
+          "sourceDigest": "ff1d24e30140db63b9f36b44b72d0e00370a272f4244565cabc2c92ea2cf2c0e",
+          "sourceId": "models.dev",
+          "sourceUrl": "https://models.dev/api.json",
+          "value": 16384
+        },
+        "outputPricePerMillion": {
+          "confidence": "official-verified",
+          "fetchedAt": "2026-07-20T13:40:00.632Z",
+          "parserVersion": "1.0.0+models-dev.1",
+          "sourceDigest": "ff1d24e30140db63b9f36b44b72d0e00370a272f4244565cabc2c92ea2cf2c0e",
+          "sourceId": "models.dev",
+          "sourceUrl": "https://models.dev/api.json",
+          "value": 10
+        },
+        "provider": {
+          "confidence": "multi-source-verified",
+          "fetchedAt": "2026-07-20T13:40:00.632Z",
+          "parserVersion": "1.0.0+models-dev.1",
+          "sourceDigest": "ff1d24e30140db63b9f36b44b72d0e00370a272f4244565cabc2c92ea2cf2c0e",
+          "sourceId": "models.dev",
+          "sourceUrl": "https://models.dev/api.json",
+          "value": "openai"
+        },
+        "requestedModelId": {
+          "confidence": "single-source",
+          "fetchedAt": "2026-07-20T13:40:00.632Z",
+          "parserVersion": "1.0.0+models-dev.1",
+          "sourceDigest": "ff1d24e30140db63b9f36b44b72d0e00370a272f4244565cabc2c92ea2cf2c0e",
+          "sourceId": "models.dev",
+          "sourceUrl": "https://models.dev/api.json",
+          "value": "gpt-4o"
+        },
+        "retirementDate": {
+          "confidence": "unavailable",
+          "fetchedAt": "2026-07-20T13:40:00.632Z",
+          "parserVersion": "1.0.0+models-dev.1",
+          "sourceDigest": "ff1d24e30140db63b9f36b44b72d0e00370a272f4244565cabc2c92ea2cf2c0e",
+          "sourceId": "models.dev",
+          "sourceUrl": "https://models.dev/api.json",
+          "value": null
+        },
+        "structuredOutput": {
+          "confidence": "official-verified",
+          "fetchedAt": "2026-07-20T13:40:00.632Z",
+          "parserVersion": "1.0.0+models-dev.1",
+          "sourceDigest": "ff1d24e30140db63b9f36b44b72d0e00370a272f4244565cabc2c92ea2cf2c0e",
+          "sourceId": "models.dev",
+          "sourceUrl": "https://models.dev/api.json",
+          "value": true
+        },
+        "toolCalling": {
+          "confidence": "official-verified",
+          "fetchedAt": "2026-07-20T13:40:00.632Z",
+          "parserVersion": "1.0.0+models-dev.1",
+          "sourceDigest": "ff1d24e30140db63b9f36b44b72d0e00370a272f4244565cabc2c92ea2cf2c0e",
+          "sourceId": "models.dev",
+          "sourceUrl": "https://models.dev/api.json",
+          "value": true
+        },
+        "vision": {
+          "confidence": "official-verified",
+          "fetchedAt": "2026-07-20T13:40:00.632Z",
+          "parserVersion": "1.0.0+models-dev.1",
+          "sourceDigest": "ff1d24e30140db63b9f36b44b72d0e00370a272f4244565cabc2c92ea2cf2c0e",
+          "sourceId": "models.dev",
+          "sourceUrl": "https://models.dev/api.json",
+          "value": true
+        }
+      },
+      "key": "openai:gpt-4o",
+      "modelId": "gpt-4o",
+      "provider": "openai"
+    },
+    {
+      "evidence": [
+        {
+          "contentDigest": "ff1d24e30140db63b9f36b44b72d0e00370a272f4244565cabc2c92ea2cf2c0e",
+          "fetchedAt": "2026-07-20T13:40:00.632Z",
+          "parserVersion": "1.0.0+models-dev.1",
+          "sourceDigest": "ff1d24e30140db63b9f36b44b72d0e00370a272f4244565cabc2c92ea2cf2c0e",
+          "sourceId": "models.dev",
+          "sourceUrl": "https://models.dev/api.json"
+        },
+        {
+          "contentDigest": "ecf1b074933a66a1540f7bca1bf57db4549bc8406f832f204e43337f3827ffc4",
+          "fetchedAt": "2026-07-20T13:40:00.633Z",
+          "parserVersion": "1.0.0+official.1",
+          "sourceDigest": "ecf1b074933a66a1540f7bca1bf57db4549bc8406f832f204e43337f3827ffc4",
+          "sourceId": "official-provider",
+          "sourceUrl": "file:data/official/providers.json"
+        }
+      ],
+      "facts": {
+        "contextLimit": {
+          "confidence": "official-verified",
+          "fetchedAt": "2026-07-20T13:40:00.632Z",
+          "parserVersion": "1.0.0+models-dev.1",
+          "sourceDigest": "ff1d24e30140db63b9f36b44b72d0e00370a272f4244565cabc2c92ea2cf2c0e",
+          "sourceId": "models.dev",
+          "sourceUrl": "https://models.dev/api.json",
+          "value": 128000
+        },
+        "identifierKind": {
+          "confidence": "official-verified",
+          "fetchedAt": "2026-07-20T13:40:00.632Z",
+          "parserVersion": "1.0.0+models-dev.1",
+          "sourceDigest": "ff1d24e30140db63b9f36b44b72d0e00370a272f4244565cabc2c92ea2cf2c0e",
+          "sourceId": "models.dev",
+          "sourceUrl": "https://models.dev/api.json",
+          "value": "fixed"
+        },
+        "inputPricePerMillion": {
+          "confidence": "official-verified",
+          "fetchedAt": "2026-07-20T13:40:00.632Z",
+          "parserVersion": "1.0.0+models-dev.1",
+          "sourceDigest": "ff1d24e30140db63b9f36b44b72d0e00370a272f4244565cabc2c92ea2cf2c0e",
+          "sourceId": "models.dev",
+          "sourceUrl": "https://models.dev/api.json",
+          "value": 2.5
+        },
+        "lifecycleStatus": {
+          "candidates": [
+            {
+              "fetchedAt": "2026-07-20T13:40:00.632Z",
+              "parserVersion": "1.0.0+models-dev.1",
+              "sourceDigest": "ff1d24e30140db63b9f36b44b72d0e00370a272f4244565cabc2c92ea2cf2c0e",
+              "sourceId": "models.dev",
+              "sourceUrl": "https://models.dev/api.json",
+              "value": "unknown"
+            },
+            {
+              "fetchedAt": "2026-07-20T13:40:00.633Z",
+              "parserVersion": "1.0.0+official.1",
+              "sourceDigest": "ecf1b074933a66a1540f7bca1bf57db4549bc8406f832f204e43337f3827ffc4",
+              "sourceId": "official-provider",
+              "sourceUrl": "file:data/official/providers.json",
+              "value": "active"
+            }
+          ],
+          "confidence": "conflicting",
+          "fetchedAt": "2026-07-20T13:40:00.632Z",
+          "parserVersion": "1.0.0+models-dev.1",
+          "sourceDigest": "ff1d24e30140db63b9f36b44b72d0e00370a272f4244565cabc2c92ea2cf2c0e",
+          "sourceId": "models.dev",
+          "sourceUrl": "https://models.dev/api.json",
+          "value": null
+        },
+        "maxOutputLimit": {
+          "confidence": "official-verified",
+          "fetchedAt": "2026-07-20T13:40:00.632Z",
+          "parserVersion": "1.0.0+models-dev.1",
+          "sourceDigest": "ff1d24e30140db63b9f36b44b72d0e00370a272f4244565cabc2c92ea2cf2c0e",
+          "sourceId": "models.dev",
+          "sourceUrl": "https://models.dev/api.json",
+          "value": 16384
+        },
+        "outputPricePerMillion": {
+          "confidence": "official-verified",
+          "fetchedAt": "2026-07-20T13:40:00.632Z",
+          "parserVersion": "1.0.0+models-dev.1",
+          "sourceDigest": "ff1d24e30140db63b9f36b44b72d0e00370a272f4244565cabc2c92ea2cf2c0e",
+          "sourceId": "models.dev",
+          "sourceUrl": "https://models.dev/api.json",
+          "value": 10
+        },
+        "provider": {
+          "confidence": "multi-source-verified",
+          "fetchedAt": "2026-07-20T13:40:00.632Z",
+          "parserVersion": "1.0.0+models-dev.1",
+          "sourceDigest": "ff1d24e30140db63b9f36b44b72d0e00370a272f4244565cabc2c92ea2cf2c0e",
+          "sourceId": "models.dev",
+          "sourceUrl": "https://models.dev/api.json",
+          "value": "openai"
+        },
+        "requestedModelId": {
+          "confidence": "single-source",
+          "fetchedAt": "2026-07-20T13:40:00.632Z",
+          "parserVersion": "1.0.0+models-dev.1",
+          "sourceDigest": "ff1d24e30140db63b9f36b44b72d0e00370a272f4244565cabc2c92ea2cf2c0e",
+          "sourceId": "models.dev",
+          "sourceUrl": "https://models.dev/api.json",
+          "value": "gpt-4o-2024-08-06"
+        },
+        "retirementDate": {
+          "confidence": "unavailable",
+          "fetchedAt": "2026-07-20T13:40:00.632Z",
+          "parserVersion": "1.0.0+models-dev.1",
+          "sourceDigest": "ff1d24e30140db63b9f36b44b72d0e00370a272f4244565cabc2c92ea2cf2c0e",
+          "sourceId": "models.dev",
+          "sourceUrl": "https://models.dev/api.json",
+          "value": null
+        },
+        "structuredOutput": {
+          "confidence": "official-verified",
+          "fetchedAt": "2026-07-20T13:40:00.632Z",
+          "parserVersion": "1.0.0+models-dev.1",
+          "sourceDigest": "ff1d24e30140db63b9f36b44b72d0e00370a272f4244565cabc2c92ea2cf2c0e",
+          "sourceId": "models.dev",
+          "sourceUrl": "https://models.dev/api.json",
+          "value": true
+        },
+        "toolCalling": {
+          "confidence": "official-verified",
+          "fetchedAt": "2026-07-20T13:40:00.632Z",
+          "parserVersion": "1.0.0+models-dev.1",
+          "sourceDigest": "ff1d24e30140db63b9f36b44b72d0e00370a272f4244565cabc2c92ea2cf2c0e",
+          "sourceId": "models.dev",
+          "sourceUrl": "https://models.dev/api.json",
+          "value": true
+        },
+        "vision": {
+          "confidence": "official-verified",
+          "fetchedAt": "2026-07-20T13:40:00.632Z",
+          "parserVersion": "1.0.0+models-dev.1",
+          "sourceDigest": "ff1d24e30140db63b9f36b44b72d0e00370a272f4244565cabc2c92ea2cf2c0e",
+          "sourceId": "models.dev",
+          "sourceUrl": "https://models.dev/api.json",
+          "value": true
+        }
+      },
+      "key": "openai:gpt-4o-2024-08-06",
+      "modelId": "gpt-4o-2024-08-06",
+      "provider": "openai"
+    },
+    {
+      "evidence": [
+        {
+          "contentDigest": "ff1d24e30140db63b9f36b44b72d0e00370a272f4244565cabc2c92ea2cf2c0e",
+          "fetchedAt": "2026-07-20T13:40:00.632Z",
+          "parserVersion": "1.0.0+models-dev.1",
+          "sourceDigest": "ff1d24e30140db63b9f36b44b72d0e00370a272f4244565cabc2c92ea2cf2c0e",
+          "sourceId": "models.dev",
+          "sourceUrl": "https://models.dev/api.json"
+        },
+        {
+          "contentDigest": "ecf1b074933a66a1540f7bca1bf57db4549bc8406f832f204e43337f3827ffc4",
+          "fetchedAt": "2026-07-20T13:40:00.633Z",
+          "parserVersion": "1.0.0+official.1",
+          "sourceDigest": "ecf1b074933a66a1540f7bca1bf57db4549bc8406f832f204e43337f3827ffc4",
+          "sourceId": "official-provider",
+          "sourceUrl": "file:data/official/providers.json"
+        }
+      ],
+      "facts": {
+        "contextLimit": {
+          "confidence": "official-verified",
+          "fetchedAt": "2026-07-20T13:40:00.632Z",
+          "parserVersion": "1.0.0+models-dev.1",
+          "sourceDigest": "ff1d24e30140db63b9f36b44b72d0e00370a272f4244565cabc2c92ea2cf2c0e",
+          "sourceId": "models.dev",
+          "sourceUrl": "https://models.dev/api.json",
+          "value": 131072
+        },
+        "identifierKind": {
+          "confidence": "official-verified",
+          "fetchedAt": "2026-07-20T13:40:00.632Z",
+          "parserVersion": "1.0.0+models-dev.1",
+          "sourceDigest": "ff1d24e30140db63b9f36b44b72d0e00370a272f4244565cabc2c92ea2cf2c0e",
+          "sourceId": "models.dev",
+          "sourceUrl": "https://models.dev/api.json",
+          "value": "floating"
+        },
+        "inputPricePerMillion": {
+          "confidence": "official-verified",
+          "fetchedAt": "2026-07-20T13:40:00.632Z",
+          "parserVersion": "1.0.0+models-dev.1",
+          "sourceDigest": "ff1d24e30140db63b9f36b44b72d0e00370a272f4244565cabc2c92ea2cf2c0e",
+          "sourceId": "models.dev",
+          "sourceUrl": "https://models.dev/api.json",
+          "value": 3
+        },
+        "lifecycleStatus": {
+          "candidates": [
+            {
+              "fetchedAt": "2026-07-20T13:40:00.632Z",
+              "parserVersion": "1.0.0+models-dev.1",
+              "sourceDigest": "ff1d24e30140db63b9f36b44b72d0e00370a272f4244565cabc2c92ea2cf2c0e",
+              "sourceId": "models.dev",
+              "sourceUrl": "https://models.dev/api.json",
+              "value": "unknown"
+            },
+            {
+              "fetchedAt": "2026-07-20T13:40:00.633Z",
+              "parserVersion": "1.0.0+official.1",
+              "sourceDigest": "ecf1b074933a66a1540f7bca1bf57db4549bc8406f832f204e43337f3827ffc4",
+              "sourceId": "official-provider",
+              "sourceUrl": "file:data/official/providers.json",
+              "value": "active"
+            }
+          ],
+          "confidence": "conflicting",
+          "fetchedAt": "2026-07-20T13:40:00.632Z",
+          "parserVersion": "1.0.0+models-dev.1",
+          "sourceDigest": "ff1d24e30140db63b9f36b44b72d0e00370a272f4244565cabc2c92ea2cf2c0e",
+          "sourceId": "models.dev",
+          "sourceUrl": "https://models.dev/api.json",
+          "value": null
+        },
+        "maxOutputLimit": {
+          "confidence": "official-verified",
+          "fetchedAt": "2026-07-20T13:40:00.632Z",
+          "parserVersion": "1.0.0+models-dev.1",
+          "sourceDigest": "ff1d24e30140db63b9f36b44b72d0e00370a272f4244565cabc2c92ea2cf2c0e",
+          "sourceId": "models.dev",
+          "sourceUrl": "https://models.dev/api.json",
+          "value": 16384
+        },
+        "outputPricePerMillion": {
+          "confidence": "official-verified",
+          "fetchedAt": "2026-07-20T13:40:00.632Z",
+          "parserVersion": "1.0.0+models-dev.1",
+          "sourceDigest": "ff1d24e30140db63b9f36b44b72d0e00370a272f4244565cabc2c92ea2cf2c0e",
+          "sourceId": "models.dev",
+          "sourceUrl": "https://models.dev/api.json",
+          "value": 15
+        },
+        "provider": {
+          "confidence": "multi-source-verified",
+          "fetchedAt": "2026-07-20T13:40:00.632Z",
+          "parserVersion": "1.0.0+models-dev.1",
+          "sourceDigest": "ff1d24e30140db63b9f36b44b72d0e00370a272f4244565cabc2c92ea2cf2c0e",
+          "sourceId": "models.dev",
+          "sourceUrl": "https://models.dev/api.json",
+          "value": "xai"
+        },
+        "requestedModelId": {
+          "confidence": "single-source",
+          "fetchedAt": "2026-07-20T13:40:00.632Z",
+          "parserVersion": "1.0.0+models-dev.1",
+          "sourceDigest": "ff1d24e30140db63b9f36b44b72d0e00370a272f4244565cabc2c92ea2cf2c0e",
+          "sourceId": "models.dev",
+          "sourceUrl": "https://models.dev/api.json",
+          "value": "grok-3"
+        },
+        "retirementDate": {
+          "confidence": "unavailable",
+          "fetchedAt": "2026-07-20T13:40:00.632Z",
+          "parserVersion": "1.0.0+models-dev.1",
+          "sourceDigest": "ff1d24e30140db63b9f36b44b72d0e00370a272f4244565cabc2c92ea2cf2c0e",
+          "sourceId": "models.dev",
+          "sourceUrl": "https://models.dev/api.json",
+          "value": null
+        },
+        "structuredOutput": {
+          "confidence": "official-verified",
+          "fetchedAt": "2026-07-20T13:40:00.632Z",
+          "parserVersion": "1.0.0+models-dev.1",
+          "sourceDigest": "ff1d24e30140db63b9f36b44b72d0e00370a272f4244565cabc2c92ea2cf2c0e",
+          "sourceId": "models.dev",
+          "sourceUrl": "https://models.dev/api.json",
+          "value": true
+        },
+        "toolCalling": {
+          "confidence": "official-verified",
+          "fetchedAt": "2026-07-20T13:40:00.632Z",
+          "parserVersion": "1.0.0+models-dev.1",
+          "sourceDigest": "ff1d24e30140db63b9f36b44b72d0e00370a272f4244565cabc2c92ea2cf2c0e",
+          "sourceId": "models.dev",
+          "sourceUrl": "https://models.dev/api.json",
+          "value": true
+        },
+        "vision": {
+          "confidence": "official-verified",
+          "fetchedAt": "2026-07-20T13:40:00.632Z",
+          "parserVersion": "1.0.0+models-dev.1",
+          "sourceDigest": "ff1d24e30140db63b9f36b44b72d0e00370a272f4244565cabc2c92ea2cf2c0e",
+          "sourceId": "models.dev",
+          "sourceUrl": "https://models.dev/api.json",
+          "value": false
+        }
+      },
+      "key": "xai:grok-3",
+      "modelId": "grok-3",
+      "provider": "xai"
+    }
+  ],
+  "schemaVersion": 1,
+  "warnings": []
+}
