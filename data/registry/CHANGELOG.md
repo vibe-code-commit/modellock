@@ -1,7 +1,7 @@
 # Registry changelog
 
-- Generated at: 2026-08-16T06:58:27.078Z
-- Previous digest: 54fbf5dcafdee7510d238aa13539d48bd7d6e25b2b7a7b58162c1053b25900ed
-- New digest: 5eff0cdcdbda4e1cd5ccd463f24cced4f2184cfe1ebc23316c5c325996c7a5c7
-- Model count: 3482 -> 3497
+- Generated at: 2026-08-17T07:15:42.875Z
+- Previous digest: 5eff0cdcdbda4e1cd5ccd463f24cced4f2184cfe1ebc23316c5c325996c7a5c7
+- New digest: 9943cdb064303a49a19c76e6a16f8aa15c46ed98a52667678ec0a72f9c5d1d6d
+- Model count: 3497 -> 3526
 - Warnings: (none)
